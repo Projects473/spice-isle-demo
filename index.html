@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spice Isle Adventures Demo Site</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Hanken+Grotesk:wght@300;400;500;600&family=Imbue:opsz,wght@10..100,500&family=Instrument+Sans:wght@400;500;600&family=Nothing+You+Could+Do&family=Tenor+Sans&family=Inter:wght@500;600&family=Cinzel:wght@400;500&family=Montserrat:wght@400;500;700&family=Marcellus&family=Jost:wght@400;500&family=Gloock&family=Plus+Jakarta+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a dusk horizon runs through the page. Dark sea-ink bands (hero, sculpture park, enquiry)
+   alternate with pale foam bands; one mace-red accent, brass hairlines, high-contrast italic display type. */
+:root{
+  color-scheme: light;
+  --deep:#06262c;      /* sea at dusk */
+  --lagoon:#0e5f66;    /* shallow water */
+  --foam:#f2f6f4;      /* page ground, cool white */
+  --mist:#dfe9e6;      /* quiet panels */
+  --ink:#0c1a1d;       /* text */
+  --brass:#b48a48;     /* hairlines, small caps */
+  --mace:#c2452d;      /* the one accent: mace, the red lace around a nutmeg */
+  --display:"Bodoni Moda","Didot","Bodoni MT",Georgia,serif;
+  --body:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
+  --lagoon2:var(--lagoon);--muted:#4c5f61;--dark2:#041b20;--on-accent:#fff;--r:0px;--br:0px;
+  --h-case:none;--h-track:-.01em;--h-weight:400;
+  --gutter:clamp(18px,5vw,72px);
+  --max:1240px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--foam);color:var(--ink);font-family:var(--body);font-weight:300;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+img,svg{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(2.6rem,7vw,5.6rem)}
+h2{font-size:clamp(2rem,4.4vw,3.4rem)}
+h3{font-size:1.55rem}
+em{font-style:italic}
+p{margin:0;max-width:62ch}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gutter)}
+.eyebrow{font-size:.74rem;letter-spacing:.26em;text-transform:uppercase;font-weight:500;color:var(--brass)}
+.btn{display:inline-flex;align-items:center;gap:.6em;padding:.95em 1.7em;font:500 .78rem/1 var(--body);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border:1px solid currentColor;background:none;color:inherit;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.btn.solid{background:var(--mace);border-color:var(--mace);color:var(--on-accent)}
+.btn.solid:hover{filter:brightness(.86)}
+.btn.ghost:hover{background:#fff;color:var(--deep);border-color:#fff}
+.btn.dark:hover{background:var(--ink);color:var(--foam);border-color:var(--ink)}
+:focus-visible{outline:2px solid var(--mace);outline-offset:3px}
+.textlink{font:500 .78rem/1 var(--body);letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--brass);padding-bottom:.45em;display:inline-block}
+.textlink:hover{border-color:var(--mace);color:var(--mace)}
+
+/* utility bar + nav */
+.util{background:var(--deep);color:#cfdedb;font-size:.78rem;letter-spacing:.06em}
+.util .wrap{display:flex;flex-wrap:wrap;gap:.4em 2em;justify-content:space-between;padding-top:.6em;padding-bottom:.6em}
+.util a{text-decoration:none;border-bottom:1px solid rgba(255,255,255,.3)}
+.stars{color:#e3b866;letter-spacing:.15em}
+header.nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--foam) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid color-mix(in srgb,var(--ink) 12%,transparent)}
+header.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:1.5em;padding-top:.9em;padding-bottom:.9em}
+.brand{text-decoration:none;display:flex;flex-direction:column;line-height:1}
+.brand b{font-family:var(--display);font-weight:500;font-size:1.5rem;letter-spacing:.02em}
+.brand span{font-size:.62rem;letter-spacing:.34em;text-transform:uppercase;color:var(--brass);margin-top:.5em;font-weight:500}
+nav.links{display:flex;gap:2em;align-items:center}
+nav.links a{font:500 .76rem/1 var(--body);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;padding:.6em 0;border-bottom:1px solid transparent}
+nav.links a:hover{border-color:var(--mace)}
+nav.links a.btn{padding:.85em 1.4em;border:1px solid var(--mace)}
+.menu-btn{display:none}
+@media (max-width:900px){
+  .menu-btn{display:inline-flex}
+  nav.links{display:none;position:absolute;left:0;right:0;top:100%;background:var(--foam);flex-direction:column;align-items:flex-start;gap:1.1em;padding:1.4em var(--gutter) 1.8em;border-bottom:1px solid color-mix(in srgb,var(--ink) 12%,transparent)}
+  nav.links.open{display:flex}
+}
+
+/* hero */
+.hero{position:relative;background:var(--deep);color:#fff;overflow:hidden}
+.hero svg.scene{position:absolute;inset:0;width:100%;height:100%}
+.hero .wrap{position:relative;padding-top:clamp(70px,11vw,150px);padding-bottom:clamp(150px,20vw,260px);display:flex;flex-direction:column;gap:1.6em;align-items:flex-start}
+.hero h1{max-width:13ch;text-shadow:0 2px 30px rgba(6,38,44,.35)}
+.hero h1 em{color:#ffd9a8}
+.hero p{font-size:1.15rem;max-width:44ch;color:#eef4f2}
+.hero .cta{display:flex;flex-wrap:wrap;gap:1em;margin-top:.6em}
+.sunset-chip{position:absolute;right:var(--gutter);bottom:clamp(24px,4vw,48px);text-align:right;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:#e9f0ee}
+.sunset-chip b{display:block;font-family:var(--display);font-style:italic;font-weight:400;font-size:2.1rem;letter-spacing:0;text-transform:none;color:#fff;font-variant-numeric:tabular-nums;line-height:1.1}
+.shimmer{animation:shimmer 7s ease-in-out infinite alternate}
+@keyframes shimmer{from{opacity:.55;transform:scaleX(.92)}to{opacity:1;transform:scaleX(1.06)}}
+@media (prefers-reduced-motion:reduce){.shimmer{animation:none}html{scroll-behavior:auto}}
+
+/* sections */
+section{padding:clamp(64px,9vw,128px) 0}
+.intro .wrap{display:grid;grid-template-columns:1fr 1.25fr;gap:clamp(28px,6vw,96px);align-items:start}
+.intro h2 em{color:var(--mace)}
+.intro .copy{display:flex;flex-direction:column;gap:1.3em}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--brass);margin-top:clamp(40px,6vw,80px)}
+.facts div{padding:1.5em 1.2em 0 0}
+.facts b{display:block;white-space:nowrap;font-family:var(--display);font-weight:400;font-size:clamp(1.5rem,3vw,2.5rem);line-height:1;font-variant-numeric:tabular-nums}
+.facts span{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:400;display:block;margin-top:.7em}
+@media (max-width:820px){.intro .wrap{grid-template-columns:1fr}.facts{grid-template-columns:repeat(2,1fr);row-gap:1em}}
+
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1.5em;margin-bottom:clamp(32px,5vw,64px)}
+.sec-head div{display:flex;flex-direction:column;gap:1em}
+
+/* experiences */
+.exp{background:var(--mist)}
+.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(16px,2.2vw,30px)}
+.card{grid-column:span 2;background:var(--foam);display:flex;flex-direction:column}
+.card.wide{grid-column:span 3}
+.card .art{position:relative;aspect-ratio:16/10;overflow:hidden}
+.card.wide .art{aspect-ratio:16/8}
+.card .art svg{width:100%;height:100%;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.card:hover .art svg{transform:scale(1.05)}
+.card .no{position:absolute;left:1.1em;top:1em;font-family:var(--display);font-style:italic;color:#fff;font-size:1.05rem}
+.card .body{padding:1.6em 1.6em 1.8em;display:flex;flex-direction:column;gap:.85em;flex:1}
+.card .body p{font-size:.98rem}
+.card .tags{display:flex;flex-wrap:wrap;gap:.4em 1.2em;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-top:auto;padding-top:.6em}
+.card .textlink{align-self:flex-start;margin-top:.5em}
+@media (max-width:980px){.card,.card.wide{grid-column:span 3}}
+@media (max-width:640px){.card,.card.wide{grid-column:span 6}}
+
+/* sculpture park */
+.park{background:var(--deep);color:#e9f1ef;padding:0}
+.park .grid{display:grid;grid-template-columns:1.1fr 1fr}
+.park .art{min-height:420px;position:relative}
+.park .art svg{position:absolute;inset:0;width:100%;height:100%}
+.park .copy{padding:clamp(48px,7vw,110px) var(--gutter);display:flex;flex-direction:column;gap:1.4em;align-items:flex-start}
+.park h2 em{color:#8fd6cf}
+.park dl{display:grid;grid-template-columns:auto 1fr;gap:.5em 1.6em;margin:.4em 0 .6em;font-size:.95rem;border-top:1px solid rgba(180,138,72,.6);padding-top:1.2em;width:100%}
+.park dt{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);font-weight:500;padding-top:.3em}
+.park dd{margin:0}
+@media (max-width:860px){.park .grid{grid-template-columns:1fr}.park .art{min-height:300px}}
+
+/* why */
+.why .cols{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,48px)}
+.why .cols div{border-top:1px solid var(--brass);padding-top:1.3em;display:flex;flex-direction:column;gap:.7em}
+.why .cols p{font-size:.98rem}
+@media (max-width:900px){.why .cols{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.why .cols{grid-template-columns:1fr}}
+
+/* crew */
+.crew{background:var(--mist)}
+.crew .list{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(14px,2vw,26px)}
+.crew .p{background:var(--foam);padding:1.6em 1.3em 1.5em;display:flex;flex-direction:column;gap:.5em;border-bottom:2px solid var(--brass)}
+.crew .mono{font-family:var(--display);font-style:italic;font-size:3rem;line-height:1;color:var(--lagoon)}
+.crew .p b{font-family:var(--display);font-weight:500;font-size:1.3rem}
+.crew .p span{font-size:.88rem;color:var(--muted)}
+@media (max-width:980px){.crew .list{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:560px){.crew .list{grid-template-columns:repeat(2,1fr)}}
+
+/* reviews */
+.rev .grid{display:grid;grid-template-columns:.8fr 1.4fr;gap:clamp(28px,6vw,90px);align-items:start}
+.score{display:flex;flex-direction:column;gap:1em;align-items:flex-start}
+.score .big{font-family:var(--display);font-size:clamp(5rem,11vw,8.5rem);line-height:.85;font-variant-numeric:tabular-nums}
+.score .stars{font-size:1.3rem;color:var(--mace)}
+.themes{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(20px,3vw,48px)}
+.themes div{border-top:1px solid color-mix(in srgb,var(--ink) 18%,transparent);padding:1.3em 0 1.6em;display:flex;flex-direction:column;gap:.5em}
+.themes b{font-family:var(--display);font-style:italic;font-weight:400;font-size:1.35rem;line-height:1.2}
+.themes p{font-size:.96rem}
+.note{font-size:.82rem;color:var(--muted);margin-top:1.5em}
+@media (max-width:860px){.rev .grid{grid-template-columns:1fr}}
+@media (max-width:560px){.themes{grid-template-columns:1fr}}
+
+/* enquire */
+.enq{background:var(--deep);color:#e9f1ef}
+.enq .grid{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(28px,6vw,90px)}
+.enq .copy{display:flex;flex-direction:column;gap:1.3em;align-items:flex-start}
+.enq h2 em{color:#ffd9a8}
+form{display:grid;grid-template-columns:1fr 1fr;gap:1.2em 1.4em}
+form .full{grid-column:1/-1}
+label{display:flex;flex-direction:column;gap:.55em;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:#b9cbc8;font-weight:500}
+input,select,textarea{font:300 1rem var(--body);color:#fff;background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.4);padding:.6em 0;border-radius:0;letter-spacing:0;text-transform:none;width:100%}
+select option{color:var(--ink)}
+textarea{min-height:5.5em;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#ffd9a8}
+input[type=date]{color-scheme:dark}
+.formmsg{grid-column:1/-1;border:1px solid var(--brass);padding:1em 1.2em;font-size:.95rem;display:none}
+.formmsg.on{display:block}
+@media (max-width:860px){.enq .grid{grid-template-columns:1fr}}
+@media (max-width:520px){form{grid-template-columns:1fr}}
+
+footer{background:var(--dark2);color:#a9bdba;font-size:.88rem;padding:clamp(40px,6vw,72px) 0 calc(2em + 70px)}
+footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:2em clamp(24px,5vw,80px)}
+footer h4{font:500 .72rem/1 var(--body);letter-spacing:.24em;text-transform:uppercase;color:var(--brass);margin:0 0 1.2em}
+footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.55em}
+footer a{text-decoration:none}
+footer a:hover{color:#fff}
+footer .brand b{color:#fff}
+footer .legal{border-top:1px solid rgba(255,255,255,.12);margin-top:3em;padding-top:1.4em;display:flex;flex-wrap:wrap;gap:.6em 2em;justify-content:space-between;font-size:.78rem}
+@media (max-width:760px){footer .cols{grid-template-columns:1fr}}
+
+/* ---------- shared hooks used by the style samples ---------- */
+h1,h2,h3{text-transform:var(--h-case);letter-spacing:var(--h-track);font-weight:var(--h-weight)}
+.btn{border-radius:var(--br)}
+.card,.crew .p,.quickbar,.formmsg{border-radius:var(--r)}
+.card{overflow:hidden}
+.quick{display:none;position:relative;z-index:3;margin-top:-46px}
+.quickbar{background:var(--foam);color:var(--ink);display:grid;grid-template-columns:1.4fr 1fr .7fr auto;gap:1em 1.4em;padding:1.2em 1.4em;box-shadow:0 18px 50px rgba(0,0,0,.2);align-items:end}
+.quickbar label{color:var(--muted)}
+.quickbar input,.quickbar select{color:var(--ink);border-bottom-color:color-mix(in srgb,var(--ink) 30%,transparent)}
+.quickbar input:focus,.quickbar select:focus{border-color:var(--mace)}
+.quickbar input[type=date]{color-scheme:inherit}
+@media (max-width:760px){.quickbar{grid-template-columns:1fr 1fr}}
+
+/* Sample 3: after the Grandium hotel theme. Charcoal, gold, booking bar on the hero. */
+[data-style="grandium"]{color-scheme:dark;--foam:#191817;--mist:#211f1d;--ink:#ebe5d9;--muted:#a59d8e;--deep:#0e0d0c;--dark2:#070706;--brass:#c5a46d;--mace:#c5a46d;--on-accent:#14110b;--lagoon:#c5a46d;
+  --display:"Playfair Display","Georgia",serif}
+[data-style="grandium"] .brand{align-items:center;text-align:center}
+[data-style="grandium"] .card{border:1px solid rgba(197,164,109,.25)}
+
+/* centred heroes and section heads for samples 2 and 3 */
+:is([data-style="regent"],[data-style="grandium"]) .hero .wrap{align-items:center;text-align:center}
+:is([data-style="regent"],[data-style="grandium"]) .hero h1{max-width:20ch}
+:is([data-style="regent"],[data-style="grandium"]) .hero .cta{justify-content:center}
+:is([data-style="regent"],[data-style="grandium"]) .sec-head{flex-direction:column;align-items:center;text-align:center}
+:is([data-style="regent"],[data-style="grandium"]) .sec-head div{align-items:center}
+
+:is([data-style="grandium"],[data-style="kanila"]) .quick{display:block}
+:is([data-style="grandium"],[data-style="kanila"]) .sunset-chip{bottom:76px}
+@media (max-width:760px){:is([data-style="grandium"],[data-style="kanila"]) .sunset-chip{display:none}}
+
+/* ---------- sample switcher ---------- */
+.switch{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:4px;max-width:calc(100vw - 20px);overflow-x:auto;
+  background:#0b0f10;color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px;font:500 13px/1 system-ui,-apple-system,"Segoe UI",sans-serif;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.switch span{padding:0 10px 0 14px;white-space:nowrap;opacity:.7}
+.switch button{font:inherit;color:#fff;background:none;border:0;border-radius:999px;padding:10px 14px;cursor:pointer;white-space:nowrap}
+.switch button:hover{background:rgba(255,255,255,.14)}
+.switch button[aria-pressed="true"]{background:#fff;color:#0b0f10}
+@media (max-width:700px){.switch span{display:none}}
+
+/* ---------- placeholder photos and hero video (illustrations stay underneath as the fallback) ---------- */
+.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.card:hover .ph{transform:scale(1.05)}
+.card .no{z-index:2;text-shadow:0 1px 10px rgba(0,0,0,.6)}
+.heroVid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s}
+.heroVid.on{opacity:1}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .9s;
+  background:linear-gradient(90deg,rgba(4,20,24,.66),rgba(4,20,24,.22) 65%),linear-gradient(0deg,rgba(4,20,24,.6),transparent 45%)}
+.hero.has-video::after{opacity:1}
+.hero .wrap,.sunset-chip{z-index:2}
+.vidBtn{display:none;position:absolute;z-index:2;left:var(--gutter);bottom:clamp(24px,4vw,48px);font:500 .7rem/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:#fff;background:rgba(4,20,24,.45);border:1px solid rgba(255,255,255,.5);border-radius:var(--br);padding:.8em 1.1em;cursor:pointer}
+.vidBtn:hover{background:rgba(4,20,24,.75)}
+.hero.has-video .vidBtn{display:inline-block}
+:is([data-style="grandium"],[data-style="kanila"]) .vidBtn{bottom:76px}
+.formmsg .acts{display:flex;flex-wrap:wrap;gap:.8em;margin-top:1em}
+.formmsg pre{white-space:pre-wrap;font:300 .9rem/1.5 var(--body);margin:.8em 0 0;opacity:.85}
+
+.parkgal{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding-top:4px}
+.parkgal figure{margin:0;position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--dark2)}
+.parkgal img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.parkgal figure:hover img{transform:scale(1.05)}
+.parkgal figcaption{position:absolute;left:1.1em;bottom:.9em;font-family:var(--display);font-style:italic;font-size:1.15rem;color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.7)}
+[data-style="kanila"] .parkgal figcaption{font-style:normal}
+.credit{max-width:none;font-size:.78rem;color:#b9cbc8;padding:.9em var(--gutter) 1.1em}
+@media (max-width:640px){.parkgal{grid-template-columns:1fr}}
+
+/* Sample 4: after the Kanila travel theme (demo2.themelexus.com/kanila). Condensed serif capitals, script eyebrows,
+   orange pills, image cards with overlaid titles, ticket stat cards, orange marquee band. */
+.h-short,.k-sub,.kfilter,.kband{display:none}
+[data-style="kanila"]{--foam:#fcfaf6;--mist:#ffffff;--ink:#161f2a;--muted:#686b73;--deep:#161f2a;--dark2:#10171f;--brass:#fb7806;--mace:#fb7806;--lagoon:#fb7806;
+  --display:"Imbue","Bodoni Moda",Georgia,serif;--body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;--r:16px;--br:30px;--h-weight:500;--h-track:0;--h-case:capitalize}
+[data-style="kanila"] body{font-weight:400;font-size:16px}
+[data-style="kanila"] p{color:var(--muted)}
+[data-style="kanila"] :is(em,.card .no,.themes b,.crew .mono,.sunset-chip b){font-style:normal}
+[data-style="kanila"] .eyebrow{font-family:"Nothing You Could Do",cursive;font-size:1.45rem;letter-spacing:.04em;text-transform:none;font-weight:400;color:var(--mace) !important;line-height:1}
+[data-style="kanila"] h2{font-size:clamp(2.3rem,5.4vw,4.9rem);line-height:1.04}
+[data-style="kanila"] h3{font-size:1.9rem;line-height:1.05}
+[data-style="kanila"] .btn,[data-style="kanila"] .textlink,[data-style="kanila"] nav.links a{letter-spacing:0;text-transform:capitalize;font-size:1rem;font-weight:400}
+[data-style="kanila"] .btn{padding:.8em 1.9em}
+[data-style="kanila"] .textlink{border-bottom:1px solid var(--mace)}
+/* header sits over the hero */
+[data-style="kanila"] header.nav{position:relative;background:transparent;border:0;color:#fff;margin-bottom:-88px;backdrop-filter:none}
+[data-style="kanila"] header.nav .wrap{height:88px;padding-top:0;padding-bottom:0}
+[data-style="kanila"] .brand span{color:#fff;opacity:.8}
+[data-style="kanila"] nav.links a.btn{background:var(--mace);border-color:var(--mace);color:#fff}
+[data-style="kanila"] .menu-btn{color:#fff}
+@media (max-width:900px){[data-style="kanila"] nav.links{background:var(--deep)}}
+/* hero */
+[data-style="kanila"] .hero .wrap{align-items:center;text-align:center;padding-top:clamp(150px,17vw,230px);padding-bottom:clamp(120px,15vw,200px);gap:1.1em}
+[data-style="kanila"] .hero::after{opacity:1;background:linear-gradient(180deg,rgba(9,52,58,.82) 0%,rgba(20,70,70,.5) 45%,rgba(251,120,6,.62) 100%)}
+[data-style="kanila"] .hero .eyebrow{font-size:clamp(1.6rem,3.2vw,2.6rem)}
+[data-style="kanila"] .h-long,[data-style="kanila"] .hero p{display:none}
+[data-style="kanila"] .h-short{display:block}
+[data-style="kanila"] .hero h1{font-size:clamp(4.4rem,14vw,11.5rem);line-height:.84;text-transform:uppercase;max-width:none;font-weight:500}
+[data-style="kanila"] .k-sub{display:block;font:500 clamp(.8rem,1.5vw,1.25rem)/1.2 var(--body);letter-spacing:.42em;text-transform:uppercase;margin:.4em 0 .6em;padding-left:.42em}
+[data-style="kanila"] .hero .cta{justify-content:center}
+[data-style="kanila"] .hero .btn.ghost{border-color:#fff}
+[data-style="kanila"] .quick{display:none}
+[data-style="kanila"] :is(.sunset-chip,.vidBtn){bottom:clamp(24px,4vw,48px)}
+@media (max-width:760px){[data-style="kanila"] .sunset-chip{display:none}}
+/* centred section heads */
+[data-style="kanila"] .sec-head{flex-direction:column;align-items:center;text-align:center}
+[data-style="kanila"] .sec-head div{align-items:center}
+/* ticket stat cards */
+[data-style="kanila"] .facts{border-top:0;gap:16px;filter:drop-shadow(0 10px 24px rgba(22,31,42,.12))}
+[data-style="kanila"] .facts div{padding:2.2em 1.5em 2em;background:var(--mace);color:#fff;
+  -webkit-mask:radial-gradient(7px at 50% 0,#0000 97%,#000) 0 0/16px 51% repeat-x,radial-gradient(7px at 50% 100%,#0000 97%,#000) 0 100%/16px 51% repeat-x;
+  mask:radial-gradient(7px at 50% 0,#0000 97%,#000) 0 0/16px 51% repeat-x,radial-gradient(7px at 50% 100%,#0000 97%,#000) 0 100%/16px 51% repeat-x}
+[data-style="kanila"] .facts div:nth-child(2){background:var(--deep)}
+[data-style="kanila"] .facts div:nth-child(3){background:#fff;color:var(--ink)}
+[data-style="kanila"] .facts b{font-size:clamp(2.6rem,5vw,4.4rem);font-weight:500}
+[data-style="kanila"] .facts span{color:inherit;opacity:.85;border-top:1px solid currentColor;padding-top:.9em;margin-top:1em;font-size:.72rem}
+/* experiences: filter pills and image cards with overlaid text */
+[data-style="kanila"] .exp{background:#fff}
+[data-style="kanila"] .kfilter{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:-1.2em 0 2.6em}
+.kfilter button{font:400 .95rem/1 var(--body);padding:.7em 1.6em;border-radius:30px;border:1px solid #e3e0d8;background:#fff;color:var(--muted);cursor:pointer}
+.kfilter button[aria-pressed="true"]{background:var(--mace);border-color:var(--mace);color:var(--on-accent)}
+[data-style="kanila"] .card{position:relative;min-height:440px;background:var(--deep);box-shadow:none}
+[data-style="kanila"] .card:nth-child(2),[data-style="kanila"] .card:nth-child(4){margin-top:36px}
+[data-style="kanila"] .card:last-child{min-height:340px}
+[data-style="kanila"] .card .art,[data-style="kanila"] .card.wide .art{position:absolute !important;inset:0;aspect-ratio:auto !important;height:100%;min-height:0 !important}
+[data-style="kanila"] .card .body{position:relative;flex:0 0 auto;margin-top:auto;color:#fff;padding-top:6em;background:linear-gradient(0deg,rgba(13,20,28,.92) 35%,rgba(13,20,28,0))}
+[data-style="kanila"] .card .body p{color:rgba(255,255,255,.88)}
+[data-style="kanila"] .card .tags{color:rgba(255,255,255,.75)}
+[data-style="kanila"] .card .textlink{color:#fff}
+.card[hidden]{display:none}
+/* orange marquee band */
+[data-style="kanila"] .kband{display:block;background:var(--mace);color:#fff;overflow:hidden;padding:1.5em 0}
+.ktrack{display:flex;align-items:center;gap:2.4em;white-space:nowrap;width:max-content;animation:kmarq 60s linear infinite;font:500 clamp(1.5rem,2.6vw,2.2rem)/1 var(--display);text-transform:uppercase;letter-spacing:.02em}
+.ktrack i{font-style:normal;font-size:.6em;opacity:.8}
+@keyframes kmarq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ktrack{animation:none}}
+/* remaining sections */
+[data-style="kanila"] .park h2 em{color:var(--mace)}
+[data-style="kanila"] .park .art .ph{border-radius:0}
+[data-style="kanila"] .why .cols div{border-top:0;background:#fff;border-radius:var(--r);padding:1.7em;box-shadow:0 8px 30px rgba(22,31,42,.06)}
+[data-style="kanila"] .crew{background:var(--foam)}
+[data-style="kanila"] .crew .p{border-bottom:0;background:#fff;box-shadow:0 8px 30px rgba(22,31,42,.06)}
+[data-style="kanila"] .rev{background:var(--deep);color:#fff;--ink:#ffffff;--muted:#a2a5ae}
+[data-style="kanila"] .rev .themes b{font-weight:500;font-size:1.6rem}
+[data-style="kanila"] .rev .textlink{color:#fff}
+[data-style="kanila"] .enq{background:var(--mace)}
+[data-style="kanila"] .enq :is(p,label){color:#fff !important}
+[data-style="kanila"] .enq .eyebrow{color:var(--deep) !important}
+[data-style="kanila"] .enq h2 em{color:var(--deep)}
+[data-style="kanila"] .enq .btn.solid{background:var(--deep);border-color:var(--deep)}
+[data-style="kanila"] .enq :is(input,select,textarea){border-bottom-color:rgba(255,255,255,.7)}
+[data-style="kanila"] .enq :is(input,select,textarea):focus{border-color:var(--deep)}
+[data-style="kanila"] .enq ::placeholder{color:rgba(255,255,255,.75)}
+[data-style="kanila"] .formmsg{border-color:#fff}
+[data-style="kanila"] footer p{color:inherit}
+
+/* ===== Samples 6-8 share a few extra hero parts, hidden elsewhere ===== */
+.hthumbs,.htabs,.hdots,.qtitle{display:none}
+:is([data-style="cozystay"],[data-style="letsgo"],[data-style="letsgo2"]) header.nav{position:relative;background:transparent;border:0;color:#fff;margin-bottom:-88px;backdrop-filter:none}
+:is([data-style="cozystay"],[data-style="letsgo"],[data-style="letsgo2"]) header.nav .wrap{height:88px;padding-top:0;padding-bottom:0}
+:is([data-style="cozystay"],[data-style="letsgo"]) .menu-btn{color:#fff}
+:is([data-style="cozystay"],[data-style="letsgo"]) .hero .wrap{align-items:center;text-align:center}
+:is([data-style="cozystay"],[data-style="letsgo"]) .hero .cta{justify-content:center}
+:is([data-style="cozystay"],[data-style="letsgo"],[data-style="letsgo2"]) :is(em,.card .no,.themes b,.crew .mono,.sunset-chip b,.parkgal figcaption){font-style:normal}
+:is([data-style="cozystay"],[data-style="letsgo2"]) .quick{display:block}
+
+/* Sample 6: after CozyStay Apartment (cozystay.loftocean.com/apartment). Near-black, Marcellus, gold hairline buttons. */
+[data-style="cozystay"]{color-scheme:dark;--foam:#151719;--mist:#151719;--ink:#ffffff;--muted:#cfcfcf;--deep:#000000;--dark2:#050505;--brass:#ab916c;--mace:#ab916c;--lagoon:#ab916c;
+  --display:"Marcellus","Bodoni Moda",Georgia,serif;--body:"Jost","Helvetica Neue",Arial,sans-serif;--h-weight:400;--h-track:0}
+[data-style="cozystay"] body{font-weight:400}
+[data-style="cozystay"] p{color:var(--muted)}
+[data-style="cozystay"] .eyebrow{font-size:11px;letter-spacing:2px;font-weight:500}
+[data-style="cozystay"] h2{font-size:clamp(2rem,3.9vw,3.5rem);line-height:1.2}
+[data-style="cozystay"] h3{font-size:1.35rem}
+[data-style="cozystay"] .btn{background:transparent !important;border:1px solid var(--brass);color:#fff;font:400 1rem/50px var(--display);letter-spacing:0;text-transform:none;padding:0 2.6em;filter:none}
+[data-style="cozystay"] .btn:hover{background:var(--brass) !important;color:#fff}
+[data-style="cozystay"] .textlink{font:400 1rem/1.2 var(--display);letter-spacing:0;text-transform:none}
+[data-style="cozystay"] .util{background:#0b0c0d;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+[data-style="cozystay"] nav.links a{font-size:13px;letter-spacing:.65px}
+[data-style="cozystay"] .brand b{text-transform:uppercase;letter-spacing:.2em;font-size:1.25rem;font-weight:400}
+[data-style="cozystay"] .brand span{color:#fff;opacity:.75}
+@media (min-width:901px){
+  [data-style="cozystay"] header.nav .wrap{position:relative}
+  [data-style="cozystay"] .brand{position:absolute;left:50%;transform:translateX(-50%);align-items:center;text-align:center}
+  [data-style="cozystay"] nav.links{flex:1}
+  [data-style="cozystay"] nav.links a.btn{margin-left:auto;line-height:44px}
+}
+@media (max-width:900px){:is([data-style="cozystay"],[data-style="letsgo"]) nav.links{background:var(--deep)}}
+[data-style="cozystay"] .hero::after{opacity:1;background:rgba(0,0,0,.42)}
+[data-style="cozystay"] .hero .wrap{padding-top:clamp(190px,22vw,300px);padding-bottom:clamp(250px,26vw,340px)}
+[data-style="cozystay"] .hero .eyebrow{color:#fff !important}
+[data-style="cozystay"] .hero h1{font-size:clamp(2.3rem,5vw,4.5rem);line-height:1.35;text-transform:uppercase;max-width:18ch}
+[data-style="cozystay"] .hero h1 em{color:#fff}
+[data-style="cozystay"] .hero p,[data-style="cozystay"] .hero .cta,[data-style="cozystay"] .sunset-chip{display:none}
+[data-style="cozystay"] .quick{margin-top:-190px;margin-bottom:100px}
+[data-style="cozystay"] .quickbar{background:rgba(21,23,25,.72);border:1px solid var(--brass);color:#fff;box-shadow:none;backdrop-filter:blur(4px)}
+[data-style="cozystay"] .quickbar label{color:#fff;font-family:var(--display);font-size:.95rem;letter-spacing:0;text-transform:none}
+[data-style="cozystay"] .quickbar :is(input,select){color:#fff;border-bottom-color:rgba(255,255,255,.3)}
+[data-style="cozystay"] .vidBtn{bottom:20px}
+[data-style="cozystay"] .sec-head{flex-direction:column;align-items:center;text-align:center}
+[data-style="cozystay"] .sec-head div{align-items:center}
+[data-style="cozystay"] .intro h2 em{color:var(--brass)}
+[data-style="cozystay"] .card{background:transparent;overflow:visible}
+[data-style="cozystay"] .card .art{aspect-ratio:4/5}
+[data-style="cozystay"] .card.wide .art{aspect-ratio:16/10}
+[data-style="cozystay"] .card .body{padding:0 1.4em 1.4em 0;position:relative}
+[data-style="cozystay"] .card h3{align-self:flex-start;background:#000;padding:.8em 1.6em;margin:-1.7em 0 .5em -0px;position:relative}
+[data-style="cozystay"] .card .body>:not(h3){margin-left:1.6em}
+[data-style="cozystay"] .park{background:#000}
+[data-style="cozystay"] .crew{background:#53624e}
+[data-style="cozystay"] .crew .p{background:rgba(0,0,0,.28);border-bottom:1px solid var(--brass)}
+[data-style="cozystay"] .crew .mono{color:#fff}
+[data-style="cozystay"] .crew p,[data-style="cozystay"] .crew .p span{color:#e6e9e3}
+[data-style="cozystay"] .enq{background:#000}
+[data-style="cozystay"] .kfilter{display:none}
+
+/* Samples 7 and 8: after LetsGo (travelhospital.wpenginepowered.com/letsgo). Deep teal, lime buttons with one large corner, Gloock headings. */
+:is([data-style="letsgo"],[data-style="letsgo2"]){--foam:#ffffff;--mist:#dcf7ff;--ink:#0d3a48;--muted:#3b5e69;--deep:#0d3a48;--dark2:#0a2e39;--brass:#0d3a48;--mace:#d5e880;--on-accent:#0d3a48;--lagoon:#0d3a48;
+  --display:"Gloock","Bodoni Moda",Georgia,serif;--body:"Plus Jakarta Sans","Helvetica Neue",Arial,sans-serif;--r:10px;--br:5px 5px 23px 5px;--h-weight:400;--h-track:0;--h-case:capitalize}
+:is([data-style="letsgo"],[data-style="letsgo2"]) body{font-weight:400;font-size:16px}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .eyebrow{font-size:12px;letter-spacing:2px;font-weight:500}
+:is([data-style="letsgo"],[data-style="letsgo2"]) h2{font-size:clamp(1.9rem,3.3vw,2.85rem);line-height:1.2}
+:is([data-style="letsgo"],[data-style="letsgo2"]) h3{font-size:1.35rem}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .btn{background:var(--mace);border-color:var(--mace);color:var(--ink);font-size:1rem;font-weight:500;letter-spacing:0;text-transform:capitalize;padding:1.05em 2.4em}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .btn:hover{background:#fff;border-color:#fff;color:var(--ink);filter:none}
+:is([data-style="letsgo"],[data-style="letsgo2"]) :is(.textlink,nav.links a){font-size:1rem;font-weight:500;letter-spacing:0;text-transform:capitalize}
+:is([data-style="letsgo"],[data-style="letsgo2"]) nav.links a.btn{padding:.9em 1.8em;border-color:var(--mace)}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .hero::after{opacity:1;background:linear-gradient(180deg,rgba(13,58,72,.62),rgba(13,58,72,.28) 55%,rgba(13,58,72,.55))}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .hero .eyebrow{color:#fff !important}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .hero h1{font-size:clamp(2.2rem,4.6vw,3.7rem);line-height:1.2;text-transform:capitalize}
+:is([data-style="letsgo"],[data-style="letsgo2"]) :is(.hero h1 em,.enq h2 em,.park h2 em){color:var(--mace)}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .intro h2 em{color:#1a7f8f}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .hero p{font-size:1rem}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .hero .btn.ghost{display:none}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .kfilter{display:flex;flex-wrap:wrap;gap:10px;margin:-1em 0 2.2em}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .kfilter button{border-radius:var(--br);border-color:#cfe3e9;color:var(--ink)}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .exp{background:#fff}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .card{border:1px solid #d9e8ed}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .facts{border:0;background:var(--mist);border-radius:var(--r);padding:2.2em 1.5em;text-align:center}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .facts div{padding:0 .8em}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .why .cols div{border:0;background:#1c4250;color:#fff;border-radius:var(--r);padding:1.8em 1.6em}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .why .cols p{color:#d7e6ea}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .crew .p{border-bottom:0;background:#fff}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .score .stars{color:var(--ink)}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .park .ph{border-radius:0}
+/* 7: Home 1, centred hero with thumbnails and numbered tabs */
+[data-style="letsgo"] .hero .wrap{padding-top:clamp(150px,15vw,200px);padding-bottom:clamp(150px,16vw,210px);gap:1.2em}
+[data-style="letsgo"] .hero h1{max-width:18ch}
+[data-style="letsgo"] .hthumbs{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:.4em 0}
+.hthumbs img{width:clamp(110px,15vw,210px);aspect-ratio:7/5;object-fit:cover;border-radius:6px}
+[data-style="letsgo"] .htabs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:absolute;z-index:2;left:var(--gutter);right:var(--gutter);bottom:22px}
+.htabs a{font:400 1.2rem/1.2 var(--display);text-decoration:none;color:#fff;background:rgba(255,255,255,.2);backdrop-filter:blur(6px);padding:1em 1.5em;border-radius:var(--br)}
+.htabs a:first-child,.htabs a:hover{background:var(--mace);color:var(--ink)}
+@media (max-width:760px){[data-style="letsgo"] .htabs{grid-template-columns:1fr 1fr}.htabs a{font-size:1rem;padding:.8em 1em}[data-style="letsgo"] .hero .wrap{padding-bottom:200px}}
+[data-style="letsgo"] .sunset-chip{display:none}
+[data-style="letsgo"] .vidBtn{bottom:auto;top:110px}
+[data-style="letsgo"] .quick{display:none}
+/* 8: Home 2, white floating header card, left hero, search bar across the bottom */
+[data-style="letsgo2"] .util{background:#fff;color:var(--ink);border-bottom:1px solid #e1edf1}
+[data-style="letsgo2"] .util .stars{color:var(--ink)}
+[data-style="letsgo2"] header.nav{background:#fff;color:var(--ink);margin:14px 14px -102px;border-radius:10px;box-shadow:0 10px 30px rgba(13,58,72,.12)}
+[data-style="letsgo2"] nav.links a.btn{background:var(--mace)}
+@media (max-width:900px){[data-style="letsgo2"] nav.links{background:#fff;border-radius:0 0 10px 10px}}
+[data-style="letsgo2"] .hero .wrap{padding-top:clamp(190px,19vw,260px);padding-bottom:clamp(170px,18vw,240px)}
+[data-style="letsgo2"] .hero h1{max-width:16ch}
+[data-style="letsgo2"] .hdots{display:flex;flex-direction:column;gap:10px;position:absolute;z-index:2;right:var(--gutter);top:50%}
+.hdots button{width:10px;height:10px;border-radius:2px;border:0;background:#fff;opacity:.9;cursor:pointer;padding:0}
+.hdots button[aria-pressed="true"]{background:var(--mace)}
+[data-style="letsgo2"] .quick{margin-top:-62px}
+[data-style="letsgo2"] .quickbar{grid-template-columns:auto 1.3fr 1fr .7fr auto;border-radius:10px;padding:1.5em 1.8em;align-items:center}
+[data-style="letsgo2"] .qtitle{display:block;font:400 1.7rem/1.1 var(--display);padding-right:1em}
+@media (max-width:900px){[data-style="letsgo2"] .quickbar{grid-template-columns:1fr 1fr}[data-style="letsgo2"] .qtitle{grid-column:1/-1}}
+[data-style="letsgo2"] :is(.sunset-chip,.vidBtn){bottom:92px}
+@media (max-width:760px){[data-style="letsgo2"] .sunset-chip{display:none}}
+[data-style="letsgo2"] :is(.why,.crew) .sec-head{flex-direction:column;align-items:center;text-align:center}
+[data-style="letsgo2"] :is(.why,.crew) .sec-head div{align-items:center}
+[data-style="letsgo2"] .why .cols div h3{color:#fff}
+[data-style="letsgo2"] .why .cols p{color:var(--mace)}
+
+.intro .wrap:last-child{display:block}
+@media (min-width:901px){[data-style="cozystay"] nav.links{gap:1.2em}[data-style="cozystay"] nav.links a{font-size:12px}[data-style="cozystay"] .brand b{font-size:1rem}}
+:is([data-style="letsgo"],[data-style="letsgo2"]) :is(.park,.enq) :is(.eyebrow,dt){color:var(--mace)}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .park dl{border-top-color:rgba(213,232,128,.5)}
+
+/* ===== shared photo parts ===== */
+.intro .wrap:not(:first-child){display:block}
+.heroPoster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero.has-photo::after{opacity:1}
+.introfig{position:relative;margin-top:clamp(36px,5vw,72px)}
+.introfig .big{width:100%;aspect-ratio:21/9;object-fit:cover;border-radius:var(--r)}
+.introfig .small{position:absolute;right:4%;bottom:-14%;width:24%;aspect-ratio:4/3;object-fit:cover;border:6px solid var(--foam);border-radius:var(--r);box-shadow:0 18px 40px rgba(0,0,0,.25)}
+.introfig+*{margin-top:0}
+.intro .facts{margin-top:clamp(56px,8vw,110px)}
+@media (max-width:640px){.introfig .small{display:none}.introfig .big{aspect-ratio:4/3}}
+.gband{padding-bottom:0}
+.gal4{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.gal4 figure{margin:0;position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--deep)}
+.gal4 img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.gal4 figure:hover img{transform:scale(1.06)}
+.gal4 figcaption{position:absolute;left:0;right:0;bottom:0;padding:4em 1.4em 1.3em;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,.72),rgba(0,0,0,0));display:flex;flex-direction:column;gap:.5em;align-items:flex-start}
+.gal4 b{font:var(--h-weight) 1.5rem/1.15 var(--display);text-transform:var(--h-case);letter-spacing:var(--h-track)}
+.gal4 a{font:500 .72rem/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:#fff;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.7);padding-bottom:.35em}
+@media (max-width:860px){.gal4{grid-template-columns:1fr 1fr}}
+.enq{position:relative;overflow:hidden}
+.enqbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.28}
+.enq .wrap{position:relative}
+[data-style="kanila"] .enqbg{opacity:.16;mix-blend-mode:multiply}
+[data-style="kanila"] .gal4{gap:16px;padding:0 var(--gutter)}
+[data-style="kanila"] .gal4 figure{border-radius:16px}
+[data-style="kanila"] .gal4 figure:nth-child(even){margin-top:36px}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .gal4{gap:16px;padding:0 var(--gutter)}
+:is([data-style="letsgo"],[data-style="letsgo2"]) .gal4 figure{border-radius:10px}
+:is([data-style="kanila"],[data-style="letsgo"],[data-style="letsgo2"]) .gal4 a{letter-spacing:0;text-transform:capitalize;font-size:.95rem}
+:is([data-style="silversea"],[data-style="regent"]) :is(em,.card .no,.themes b,.crew .mono,.sunset-chip b,.parkgal figcaption){font-style:normal}
+:is([data-style="silversea"],[data-style="regent"]) .quick{display:block}
+
+/* Sample 1: after silversea.com. White, charcoal and soft gold; light capital headings, serif text, small bold sans buttons. */
+[data-style="silversea"]{--foam:#ffffff;--mist:#f5f5f5;--ink:#303030;--muted:#5a5a5a;--deep:#303030;--dark2:#303030;--brass:#d6d6d6;--mace:#f0bc75;--on-accent:#303030;--lagoon:#303030;
+  --display:"Tenor Sans","Marcellus",Georgia,serif;--body:"Cormorant Garamond","Garamond",Georgia,serif;--ui:"Inter","Helvetica Neue",Arial,sans-serif;--r:8px;--br:4px;--h-case:uppercase;--h-track:1px;--h-weight:400}
+[data-style="silversea"] body{font-size:19px;font-weight:500;letter-spacing:.3px;line-height:1.6}
+[data-style="silversea"] h2{font-size:clamp(1.7rem,2.9vw,2.5rem);line-height:1.5}
+[data-style="silversea"] h3{font-size:1.6rem;text-transform:none;letter-spacing:.5px;line-height:1.35}
+[data-style="silversea"] .eyebrow{font:600 12px/1 var(--ui);letter-spacing:.6px;color:#8a7350}
+[data-style="silversea"] .btn{font:600 13px/1 var(--ui);letter-spacing:.6px;padding:13px 18px;background:var(--deep);border-color:var(--deep);color:#fff}
+[data-style="silversea"] .btn.solid{background:var(--mace);border-color:var(--mace);color:#303030}
+[data-style="silversea"] .btn:hover{filter:brightness(.92);background:var(--deep);color:#fff}
+[data-style="silversea"] .btn.solid:hover{background:var(--mace);color:#303030}
+[data-style="silversea"] .textlink{font:600 13px/1 var(--ui);letter-spacing:.6px;border-bottom:1px solid var(--ink)}
+[data-style="silversea"] .textlink::after{content:"  \2192"}
+[data-style="silversea"] .util{background:#f5f5f5;color:#303030;font:600 11px/1.6 var(--ui);letter-spacing:.2px}
+[data-style="silversea"] .util .stars{color:#c9973f}
+[data-style="silversea"] header.nav{background:#fff}
+[data-style="silversea"] .brand b{font-family:var(--display);text-transform:uppercase;letter-spacing:.22em;font-size:1.25rem;font-weight:400}
+[data-style="silversea"] .brand span{color:#8a7350;font-family:var(--ui)}
+[data-style="silversea"] nav.links a{font:600 14px/1 var(--ui);letter-spacing:.2px}
+[data-style="silversea"] nav.links a.btn{background:var(--mace);border-color:var(--mace);color:#303030;font-size:13px}
+[data-style="silversea"] .hero .wrap{align-items:center;text-align:center;padding-top:clamp(130px,17vw,240px);padding-bottom:clamp(90px,10vw,140px);gap:1.1em}
+[data-style="silversea"] .hero::after{opacity:1;background:linear-gradient(0deg,rgba(20,20,20,.62),rgba(20,20,20,.12) 70%)}
+[data-style="silversea"] .hero .eyebrow{display:none}
+[data-style="silversea"] .hero h1{font-size:clamp(1.9rem,3.6vw,3rem);line-height:1.34;max-width:22ch}
+[data-style="silversea"] .hero h1 em{color:#fff}
+[data-style="silversea"] .hero p{font-size:1.25rem;max-width:50ch}
+[data-style="silversea"] .hero .cta{justify-content:center}
+[data-style="silversea"] .hero .btn.ghost{display:none}
+[data-style="silversea"] .quick{margin-top:0;background:#303030}
+[data-style="silversea"] .quickbar{background:transparent;box-shadow:none;color:#fff;padding:1.3em 0;border-radius:0}
+[data-style="silversea"] .quickbar label{color:#fff;font:600 10px/1 var(--ui);letter-spacing:.6px}
+[data-style="silversea"] .quickbar :is(input,select){color:#fff;border-bottom-color:#fff;font-family:var(--body);color-scheme:dark}
+[data-style="silversea"] .sec-head{flex-direction:column;align-items:center;text-align:center}
+[data-style="silversea"] .sec-head div{align-items:center}
+[data-style="silversea"] .intro .wrap:first-child{grid-template-columns:1fr;text-align:center;justify-items:center;gap:1.4em}
+[data-style="silversea"] .intro .copy{align-items:center}
+[data-style="silversea"] .intro .copy .textlink{align-self:center !important}
+[data-style="silversea"] .intro h2{max-width:26ch}
+[data-style="silversea"] .intro h2 em{color:inherit}
+[data-style="silversea"] .facts{border-top:0;text-align:center}
+[data-style="silversea"] .facts div{padding:0 1em}
+[data-style="silversea"] .facts b{font-size:clamp(1.6rem,3vw,2.3rem)}
+[data-style="silversea"] .facts span{font:600 11px/1.5 var(--ui);letter-spacing:.6px}
+[data-style="silversea"] :is(.exp,.crew){background:#f5f5f5}
+[data-style="silversea"] .card{background:#fff;border:0}
+[data-style="silversea"] .card .tags{font:600 11px/1.5 var(--ui);letter-spacing:.6px}
+[data-style="silversea"] .card .textlink{align-self:flex-end}
+[data-style="silversea"] .park{background:#fff;color:#303030}
+[data-style="silversea"] .park h2 em{color:inherit}
+[data-style="silversea"] .park dl{border-top-color:#d6d6d6}
+[data-style="silversea"] .park dt{color:#8a7350;font:600 11px/1.9 var(--ui);letter-spacing:.6px}
+[data-style="silversea"] .park .ph{border-radius:0 8px 8px 0}
+[data-style="silversea"] .parkgal{gap:16px;padding:16px var(--gutter) 0}
+[data-style="silversea"] .parkgal figure{border-radius:8px}
+[data-style="silversea"] .credit{color:#777}
+[data-style="silversea"] .why .cols div{border-top:0;text-align:center;align-items:center}
+[data-style="silversea"] .gal4{gap:16px;padding:0 var(--gutter)}
+[data-style="silversea"] .gal4 figure{border-radius:8px;display:flex;align-items:center;justify-content:center}
+[data-style="silversea"] .gal4 img{position:absolute;inset:0}
+[data-style="silversea"] .gal4 figcaption{position:relative;left:auto;right:auto;bottom:auto;width:74%;padding:1.6em 1em;background:rgba(255,255,255,.82);color:#303030;align-items:center;text-align:center;gap:1em;border-radius:4px}
+[data-style="silversea"] .gal4 b{font-size:1rem;line-height:1.45}
+[data-style="silversea"] .gal4 a{background:#303030;color:#fff;border:0;border-radius:4px;padding:10px 14px;font:600 12px/1 var(--ui);letter-spacing:.6px}
+[data-style="silversea"] .crew .p{border-bottom:0;border-radius:8px}
+[data-style="silversea"] .crew .p span,[data-style="silversea"] .themes p{font-size:1.05rem}
+[data-style="silversea"] .score .stars{color:#c9973f}
+[data-style="silversea"] .enq h2 em{color:var(--mace)}
+[data-style="silversea"] .enq label{font:600 11px/1 var(--ui);letter-spacing:.6px}
+[data-style="silversea"] footer{font-family:var(--ui);font-weight:500;font-size:.8rem}
+[data-style="silversea"] footer h4{font-family:var(--ui);color:#f0bc75}
+
+/* Sample 2: after rssc.com. Charcoal bars, white pages, bronze accents; Cinzel capitals over Montserrat. */
+[data-style="regent"]{--foam:#ffffff;--mist:#ffffff;--ink:#1f1f1f;--muted:#4d4d4d;--deep:#1f1f1f;--dark2:#1f1f1f;--brass:#8b6a3f;--mace:#8b6a3f;--on-accent:#ffffff;--lagoon:#8b6a3f;
+  --display:"Cinzel","Marcellus",Georgia,serif;--body:"Montserrat","Helvetica Neue",Arial,sans-serif;--r:0px;--br:0px;--h-case:uppercase;--h-track:0;--h-weight:400}
+[data-style="regent"] body{font-size:15px;font-weight:500;line-height:1.5}
+[data-style="regent"] h2{font-size:clamp(1.5rem,2.3vw,1.85rem);line-height:1.1}
+[data-style="regent"] h3{font-size:1.25rem;line-height:1.1}
+[data-style="regent"] .eyebrow{font-size:11px;letter-spacing:.4px;font-weight:700}
+[data-style="regent"] .btn{font:700 12px/1 var(--body);letter-spacing:.4px;padding:11px 16px;background:var(--mace);border-color:var(--mace);color:#fff}
+[data-style="regent"] .btn:hover{background:#6f5330;border-color:#6f5330;color:#fff;filter:none}
+[data-style="regent"] .textlink{font:700 12px/1 var(--body);letter-spacing:.4px;border:0;padding:0}
+[data-style="regent"] .textlink::after{content:"  \203A";font-size:1.3em}
+[data-style="regent"] .util{display:none}
+[data-style="regent"] header.nav{background:#1f1f1f;color:#fff;border:0}
+[data-style="regent"] header.nav .wrap{height:71px;padding-top:0;padding-bottom:0}
+[data-style="regent"] .brand b{font-family:var(--display);font-weight:400;font-size:1.35rem;letter-spacing:.04em}
+[data-style="regent"] .brand span{color:#fff;opacity:.8;letter-spacing:.3em}
+[data-style="regent"] nav.links a{font:700 11px/1 var(--body);letter-spacing:.4px}
+[data-style="regent"] nav.links a.btn{background:#fff;border-color:#fff;color:var(--mace)}
+[data-style="regent"] .menu-btn{background:transparent;color:#fff;border-color:#fff}
+@media (min-width:901px){
+  [data-style="regent"] header.nav .wrap{position:relative}
+  [data-style="regent"] .brand{position:absolute;left:50%;transform:translateX(-50%);align-items:center;text-align:center}
+  [data-style="regent"] nav.links{flex:1;gap:1.8em}
+  [data-style="regent"] nav.links a.btn{margin-left:auto}
+}
+@media (max-width:900px){[data-style="regent"] nav.links{background:#1f1f1f}}
+[data-style="regent"] .hero .wrap{align-items:flex-start;text-align:left;padding-top:clamp(120px,15vw,220px);padding-bottom:clamp(170px,17vw,240px);gap:1em}
+[data-style="regent"] .hero::after{opacity:1;background:linear-gradient(90deg,rgba(0,0,0,.68),rgba(0,0,0,.25) 45%,rgba(0,0,0,0) 70%)}
+[data-style="regent"] .hero .eyebrow{display:none}
+[data-style="regent"] .hero h1{font-size:clamp(1.8rem,3vw,2.5rem);line-height:1.06;max-width:20ch}
+[data-style="regent"] .hero h1 em{color:#fff}
+[data-style="regent"] .hero p{font-size:1rem;max-width:38ch;font-weight:500}
+[data-style="regent"] .hero .cta{justify-content:flex-start}
+[data-style="regent"] .hero .btn.solid{background:#fff;border-color:#fff;color:var(--mace)}
+[data-style="regent"] .hero .btn.ghost{display:none}
+[data-style="regent"] .quick{margin-top:-78px}
+[data-style="regent"] .quickbar{background:#1f1f1f;color:#fff;box-shadow:none;padding:1em 1.4em;align-items:center}
+[data-style="regent"] .quickbar label{color:#fff;font-size:10px;letter-spacing:.4px;font-weight:700}
+[data-style="regent"] .quickbar :is(input,select){color:#fff;border-bottom-color:rgba(255,255,255,.4);color-scheme:dark;font-size:.9rem}
+[data-style="regent"] .quickbar .btn{background:#fff;border-color:#fff;color:var(--mace)}
+[data-style="regent"] :is(.sunset-chip,.vidBtn){bottom:104px}
+@media (max-width:760px){[data-style="regent"] .sunset-chip{display:none}}
+[data-style="regent"] .sec-head .textlink{background:var(--mace);color:#fff;padding:11px 16px}
+[data-style="regent"] .sec-head .textlink::after{content:""}
+[data-style="regent"] .intro h2 em{color:var(--mace)}
+[data-style="regent"] .facts b{font-size:clamp(1.6rem,2.8vw,2.2rem)}
+[data-style="regent"] .exp{background:#fff}
+[data-style="regent"] .cards{gap:10px}
+[data-style="regent"] .card{position:relative;min-height:360px;background:#1f1f1f}
+[data-style="regent"] .card .art,[data-style="regent"] .card.wide .art{position:absolute !important;inset:0;aspect-ratio:auto !important;height:100%;min-height:0 !important}
+[data-style="regent"] .card .body{position:relative;flex:0 0 auto;margin-top:auto;color:#fff;padding:5em 1.5em 1.4em;gap:.7em;background:linear-gradient(0deg,rgba(0,0,0,.85),rgba(0,0,0,0))}
+[data-style="regent"] .card h3{font-size:1.5rem;max-width:12ch}
+[data-style="regent"] .card .tags{display:none}
+[data-style="regent"] .card .textlink{color:#fff;margin-top:0}
+[data-style="regent"] .card .body p{color:#fff;max-height:0;opacity:0;overflow:hidden;transition:max-height .5s,opacity .4s;font-size:.9rem}
+[data-style="regent"] .card:is(:hover,:focus-within) .body p{max-height:9em;opacity:1}
+@media (hover:none){[data-style="regent"] .card .body p{max-height:none;opacity:1}}
+[data-style="regent"] .card .no{display:none}
+[data-style="regent"] .gal4{gap:10px;padding:0 var(--gutter)}
+[data-style="regent"] .gal4 b{font-size:1.4rem;max-width:10ch}
+[data-style="regent"] .gal4 a{border:0;font:700 12px/1 var(--body);letter-spacing:.4px}
+[data-style="regent"] .gal4 a::after{content:"  \203A";font-size:1.3em}
+[data-style="regent"] .park h2 em{color:#d9b98a}
+[data-style="regent"] .park dt{color:#d9b98a}
+[data-style="regent"] .park .btn{background:#fff;border-color:#fff;color:var(--mace)}
+[data-style="regent"] .crew{background:#fff}
+[data-style="regent"] .crew .p{border:1px solid #e4ddd2;border-bottom:2px solid var(--mace)}
+[data-style="regent"] .crew .mono{color:var(--mace)}
+[data-style="regent"] .enq h2 em{color:#d9b98a}
+[data-style="regent"] .enq .eyebrow{color:#d9b98a}
+[data-style="regent"] footer h4{font-family:var(--display);font-size:.95rem;letter-spacing:0;color:#fff;font-weight:400}
+</style>
+</head>
+<body>
+
+<div class="util"><div class="wrap">
+  <span>Grand Anse, South Coast, Grenada</span>
+  <span><span class="stars" aria-hidden="true">●●●●●</span> 5.0 on Tripadvisor · <a href="#enquire">Plan a charter</a></span>
+</div></div>
+
+<header class="nav"><div class="wrap">
+  <a class="brand" href="#top"><b>Spice Isle Adventures</b><span>Tours &amp; Water Sports</span></a>
+  <button class="btn dark menu-btn" id="menuBtn" aria-expanded="false" aria-controls="links">Menu</button>
+  <nav class="links" id="links">
+    <a href="#experiences">Experiences</a>
+    <a href="#sculpture-park">Sculpture Park</a>
+    <a href="#crew">The Crew</a>
+    <a href="#reviews">Reviews</a>
+    <a class="btn" href="#enquire">Enquire</a>
+  </nav>
+</div></header>
+
+<main id="top">
+<div class="hero">
+  <svg class="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#06262c"/><stop offset=".38" stop-color="#184d58"/>
+        <stop offset=".6" stop-color="#b9764f"/><stop offset=".72" stop-color="#e79a52"/><stop offset=".76" stop-color="#f5c27a"/>
+      </linearGradient>
+      <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#1b5560"/><stop offset=".35" stop-color="#0c3a43"/><stop offset="1" stop-color="#06262c"/>
+      </linearGradient>
+      <radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe2a8" stop-opacity=".9"/><stop offset="1" stop-color="#ffe2a8" stop-opacity="0"/></radialGradient>
+    </defs>
+    <rect width="1600" height="900" fill="url(#sky)"/>
+    <circle cx="1130" cy="640" r="330" fill="url(#glow)"/>
+    <circle cx="1130" cy="655" r="62" fill="#fff1c9"/>
+    <!-- headland -->
+    <path d="M0 668 C120 640 210 612 330 628 C430 640 470 662 560 670 L0 670Z" fill="#0b3037" opacity=".85"/>
+    <rect y="668" width="1600" height="232" fill="url(#sea)"/>
+    <g fill="#ffd9a0" class="shimmer" style="transform-origin:1130px 760px">
+      <rect x="1068" y="676" width="124" height="3" opacity=".9"/><rect x="1048" y="692" width="164" height="3" opacity=".7"/>
+      <rect x="1082" y="710" width="96" height="3" opacity=".6"/><rect x="1030" y="732" width="200" height="4" opacity=".45"/>
+      <rect x="1074" y="760" width="112" height="4" opacity=".35"/><rect x="1010" y="794" width="240" height="5" opacity=".22"/>
+    </g>
+    <!-- yacht silhouette -->
+    <g fill="#041b20" transform="translate(690 610)">
+      <path d="M0 52 L300 52 L322 40 L296 70 L22 70Z"/>
+      <path d="M60 52 L78 26 L210 26 L238 52Z"/>
+      <path d="M104 26 L116 8 L186 8 L198 26Z"/>
+      <rect x="150" y="-14" width="2.5" height="22"/>
+      <g fill="#f5c27a" opacity=".85"><rect x="92" y="34" width="26" height="8"/><rect x="126" y="34" width="26" height="8"/><rect x="160" y="34" width="26" height="8"/></g>
+    </g>
+    <rect x="700" y="682" width="290" height="2" fill="#041b20" opacity=".5"/>
+  </svg>
+  <img class="heroPoster" src="https://images.unsplash.com/photo-1593351415075-3bac9f45c877?fm=jpg&amp;q=75&amp;w=2000&amp;auto=format&amp;fit=crop" alt="" onload="this.parentNode.classList.add('has-photo')" onerror="this.remove()">
+  <video class="heroVid" id="heroVid" muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
+  <button class="vidBtn" id="vidBtn" type="button" aria-pressed="false">Pause video</button>
+  <div class="wrap">
+    <span class="eyebrow" style="color:#ffd9a8">Private yacht tours · Grand Anse</span>
+    <h1><span class="h-long">Grenada, seen <em>privately</em> from the water.</span><span class="h-short">Sail<br>Grenada</span></h1>
+    <span class="k-sub">Privately, with us</span>
+    <p>Sunset cruises, snorkelling over the Underwater Sculpture Park, quiet beaches and dinner on deck. Your boat, your crew, your pace.</p>
+    <div class="hthumbs"><img src="https://images.unsplash.com/photo-1593351415075-3bac9f45c877?fm=jpg&amp;q=75&amp;w=600&amp;auto=format&amp;fit=crop" alt="Power boat at sunset" loading="lazy" onerror="this.remove()"><img src="https://images.unsplash.com/photo-1560477936-d27e03b6cb55?fm=jpg&amp;q=75&amp;w=600&amp;auto=format&amp;fit=crop" alt="Snorkelling beside the boat" loading="lazy" onerror="this.remove()"><img src="https://images.unsplash.com/photo-1616555846456-6d53b92669a8?fm=jpg&amp;q=75&amp;w=600&amp;auto=format&amp;fit=crop" alt="Grenada beach from above" loading="lazy" onerror="this.remove()"></div>
+    <div class="cta">
+      <a class="btn solid" href="#enquire">Plan your charter</a>
+      <a class="btn ghost" href="#experiences">View experiences</a>
+    </div>
+  </div>
+  <div class="htabs"><a href="#experiences" data-f="sunset">01. Sunset</a><a href="#experiences" data-f="snorkel">02. Snorkel</a><a href="#experiences" data-f="beaches">03. Beaches</a><a href="#experiences" data-f="celebrations">04. Celebrations</a></div>
+  <div class="hdots" role="group" aria-label="Change hero video"><button type="button" data-v="7060" aria-label="Video 1" aria-pressed="true"></button><button type="button" data-v="5375" aria-label="Video 2" aria-pressed="false"></button><button type="button" data-v="5006" aria-label="Video 3" aria-pressed="false"></button><button type="button" data-v="1941" aria-label="Video 4" aria-pressed="false"></button></div>
+  <div class="sunset-chip">Sunset at Grand Anse today<b id="sunsetTime">about 5:40 pm</b></div>
+</div>
+
+<div class="quick"><div class="wrap"><div class="quickbar">
+  <strong class="qtitle">Find your charter</strong>
+  <label>Experience<select id="q-exp"><option>Sunset Cruise</option><option>Sculpture Park Snorkel</option><option>Wonders of Grenada</option><option>Private Island Tour</option><option>Private Dinner Aboard</option><option>Parties &amp; Celebrations</option></select></label>
+  <label>Date<input id="q-date" type="date"></label>
+  <label>Guests<input id="q-guests" type="number" min="1" max="40" value="2"></label>
+  <button class="btn solid" id="q-go" type="button">Check availability</button>
+</div></div></div>
+
+<section class="intro">
+  <div class="wrap">
+    <div><span class="eyebrow">A luxurious yacht tour company</span>
+      <h2 style="margin-top:.5em">The island keeps its best coast for people who arrive <em>by boat</em>.</h2></div>
+    <div class="copy">
+      <p>Spice Isle Adventures Tours &amp; Water Sports runs private charters from Grand Anse, on Grenada's sheltered south-west coast. Every outing is booked for one party only, so the day bends around you: a later start, a longer swim, one more bay before the sun goes.</p>
+      <p>Choose a sunset cruise, a private island tour, a snorkel over the sculpture park, dinner on board, or a party on the water. The crew bring the stories; guests say that is half of what they remember.</p>
+      <a class="textlink" href="#experiences" style="align-self:flex-start">See the experiences</a>
+    </div>
+  </div>
+  <div class="wrap"><div class="introfig">
+    <img class="big" src="https://images.unsplash.com/photo-1663513628041-1ca7257e853d?fm=jpg&amp;q=75&amp;w=2000&amp;auto=format&amp;fit=crop" alt="A sheltered Grenada bay with boats at anchor in turquoise water, seen from above" loading="lazy" onerror="this.parentNode.remove()">
+    <img class="small" src="https://images.unsplash.com/photo-1781484847919-2dce4c021a38?fm=jpg&amp;q=75&amp;w=800&amp;auto=format&amp;fit=crop" alt="Snorkeller in clear blue water" loading="lazy" onerror="this.remove()">
+  </div></div>
+  <div class="wrap"><div class="facts">
+    <div><b>5.0</b><span>Tripadvisor rating</span></div>
+    <div><b>6 of 6</b><span>Reviews rated five</span></div>
+    <div><b>2019</b><span>First guest review</span></div>
+    <div><b>1 party</b><span>Per boat, always private</span></div>
+  </div></div>
+</section>
+
+<section class="exp" id="experiences">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow">Experiences</span><h2>Six ways to spend a day afloat</h2></div>
+      <a class="textlink" href="#enquire">Request a quote</a>
+    </div>
+    <div class="kfilter" role="group" aria-label="Filter experiences">
+      <button type="button" data-f="all" aria-pressed="true">All</button>
+      <button type="button" data-f="sunset" aria-pressed="false">Sunset</button>
+      <button type="button" data-f="snorkel" aria-pressed="false">Snorkel</button>
+      <button type="button" data-f="beaches" aria-pressed="false">Beaches</button>
+      <button type="button" data-f="celebrations" aria-pressed="false">Celebrations</button>
+    </div>
+    <div class="cards">
+
+      <article data-cat="sunset" class="card wide">
+        <div class="art"><svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="800" height="400" fill="url(#sky)"/><circle cx="560" cy="270" r="150" fill="url(#glow)"/><circle cx="560" cy="282" r="34" fill="#fff1c9"/>
+          <rect y="290" width="800" height="110" fill="url(#sea)"/>
+          <g fill="#ffd9a0"><rect x="520" y="298" width="80" height="2.5" opacity=".8"/><rect x="500" y="314" width="120" height="3" opacity=".5"/><rect x="530" y="336" width="60" height="3" opacity=".35"/></g>
+          <g fill="#041b20" transform="translate(180 262) scale(.6)"><path d="M0 52 L300 52 L322 40 L296 70 L22 70Z"/><path d="M60 52 L78 26 L210 26 L238 52Z"/><path d="M104 26 L116 8 L186 8 L198 26Z"/></g>
+        </svg><img class="ph" src="https://images.unsplash.com/photo-1593351415075-3bac9f45c877?fm=jpg&amp;q=75&amp;w=1600&amp;auto=format&amp;fit=crop" alt="Power boat running across the sea at sunset" loading="lazy" onerror="this.remove()"><span class="no">No. 1</span></div>
+        <div class="body"><h3>Sunset Cruise</h3>
+          <p>Leave Grand Anse as the light turns gold and follow the coast with music, drinks and something good to eat while the sun drops into the Caribbean.</p>
+          <div class="tags"><span>Evening</span><span>Music &amp; drinks</span><span>Couples and groups</span></div>
+          <a class="textlink" href="#enquire" data-exp="Sunset Cruise">Enquire</a></div>
+      </article>
+
+      <article data-cat="snorkel" class="card wide">
+        <div class="art"><svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><linearGradient id="deepw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fb6b3"/><stop offset=".5" stop-color="#127a82"/><stop offset="1" stop-color="#06323b"/></linearGradient></defs>
+          <rect width="800" height="400" fill="url(#deepw)"/>
+          <g fill="#fff" opacity=".12"><path d="M120 0 L210 0 L330 400 L150 400Z"/><path d="M380 0 L430 0 L560 400 L440 400Z"/><path d="M600 0 L690 0 L800 330 L800 400 L720 400Z"/></g>
+          <path d="M0 340 C140 300 240 350 380 330 C520 310 640 356 800 322 L800 400 L0 400Z" fill="#052b33"/>
+          <g fill="#f2c979"><path d="M250 190 q22 -14 44 0 q-22 14 -44 0z M294 190 l14 -9 v18z"/><path d="M330 226 q18 -11 36 0 q-18 11 -36 0z M366 226 l11 -7 v14z"/><path d="M470 160 q20 -12 40 0 q-20 12 -40 0z M510 160 l12 -8 v16z"/></g>
+          <g fill="#fff" opacity=".5"><circle cx="610" cy="250" r="5"/><circle cx="624" cy="214" r="3.5"/><circle cx="602" cy="182" r="2.5"/></g>
+        </svg><img class="ph" src="https://commons.wikimedia.org/wiki/Special:FilePath/Vicissitudes_closeup,_Grenada_Underwater_Sculptures_%28SunCat%29_-_Flickr.jpg?width=1600" alt="Close view of the Vicissitudes ring of figures in the Molinere Underwater Sculpture Park, Grenada" loading="lazy" onerror="this.remove()"><span class="no">No. 2</span></div>
+        <div class="body"><h3>Sculpture Park Snorkel</h3>
+          <p>Float over the figures of the Molinere Underwater Sculpture Park with a guide who knows where each one stands and what it means.</p>
+          <div class="tags"><span>Snorkel</span><span>Guided</span><span>Most reviewed</span></div>
+          <a class="textlink" href="#enquire" data-exp="Sculpture Park Snorkel">Enquire</a></div>
+      </article>
+
+      <article data-cat="snorkel" class="card">
+        <div class="art"><svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="800" height="500" fill="#8fd6cf"/><rect y="0" width="800" height="210" fill="#bfe6ee"/>
+          <path d="M0 210 C200 196 330 228 520 214 C650 206 720 220 800 212 L800 500 L0 500Z" fill="#2aa7a5"/>
+          <path d="M0 300 C180 280 300 320 470 300 C620 284 700 310 800 296 L800 500 L0 500Z" fill="#127a82"/>
+          <path d="M420 500 C520 400 660 372 800 366 L800 500Z" fill="#eadcbd"/>
+          <path d="M0 210 C70 150 150 130 250 170 C300 188 330 204 360 212Z" fill="#17594d"/>
+        </svg><img class="ph" src="https://images.unsplash.com/photo-1560477936-d27e03b6cb55?fm=jpg&amp;q=75&amp;w=1600&amp;auto=format&amp;fit=crop" alt="Snorkellers in clear water beside the boat, seen from above" loading="lazy" onerror="this.remove()"><span class="no">No. 3</span></div>
+        <div class="body"><h3>Wonders of Grenada</h3>
+          <p>A snorkel adventure along the calm Caribbean side of the island, with time in the water and the island's history told between stops.</p>
+          <div class="tags"><span>Snorkel</span><span>Coastline</span></div>
+          <a class="textlink" href="#enquire" data-exp="Wonders of Grenada">Enquire</a></div>
+      </article>
+
+      <article data-cat="beaches" class="card">
+        <div class="art"><svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="800" height="500" fill="#cdebf0"/>
+          <rect y="230" width="800" height="120" fill="#35b3ae"/><rect y="300" width="800" height="60" fill="#6fd0c6"/>
+          <path d="M0 350 C200 330 500 372 800 340 L800 500 L0 500Z" fill="#efe3c6"/>
+          <g stroke="#17594d" stroke-width="9" fill="none" stroke-linecap="round"><path d="M610 400 C618 320 640 250 676 196"/></g>
+          <g fill="#17594d"><path d="M676 196 C640 160 590 164 560 190 C604 176 640 184 676 196Z"/><path d="M676 196 C700 150 750 140 790 160 C744 158 708 172 676 196Z"/><path d="M676 196 C650 130 600 110 566 120 C612 132 648 158 676 196Z"/><path d="M676 196 C720 190 760 214 776 250 C748 220 714 204 676 196Z"/></g>
+          <circle cx="170" cy="110" r="44" fill="#fff6d8"/>
+        </svg><img class="ph" src="https://images.unsplash.com/photo-1616555846456-6d53b92669a8?fm=jpg&amp;q=75&amp;w=1600&amp;auto=format&amp;fit=crop" alt="White-sand beach and turquoise water in Grenada from above" loading="lazy" onerror="this.remove()"><span class="no">No. 4</span></div>
+        <div class="body"><h3>Private Island Tour</h3>
+          <p>A day of beaches chosen for you: Flamingo Bay, Mango Beach and Grand Anse are guest favourites, with swims and stops wherever you like.</p>
+          <div class="tags"><span>Beaches</span><span>Swim stops</span></div>
+          <a class="textlink" href="#enquire" data-exp="Private Island Tour">Enquire</a></div>
+      </article>
+
+      <article data-cat="celebrations" class="card">
+        <div class="art"><svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs><linearGradient id="night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#041b20"/><stop offset=".7" stop-color="#123f4a"/><stop offset="1" stop-color="#6b4a3c"/></linearGradient></defs>
+          <rect width="800" height="500" fill="url(#night)"/>
+          <g fill="#fff" opacity=".7"><circle cx="90" cy="70" r="1.6"/><circle cx="230" cy="40" r="1.2"/><circle cx="380" cy="96" r="1.5"/><circle cx="520" cy="50" r="1.2"/><circle cx="690" cy="84" r="1.7"/><circle cx="610" cy="150" r="1.1"/><circle cx="160" cy="160" r="1.1"/></g>
+          <path d="M60 150 Q400 250 740 150" stroke="#b48a48" stroke-width="1.5" fill="none"/>
+          <g fill="#ffd9a0"><circle cx="160" cy="176" r="8"/><circle cx="280" cy="197" r="8"/><circle cx="400" cy="204" r="8"/><circle cx="520" cy="197" r="8"/><circle cx="640" cy="176" r="8"/></g>
+          <rect y="400" width="800" height="100" fill="#041b20"/>
+          <rect x="250" y="360" width="300" height="10" fill="#efe3c6"/><rect x="280" y="370" width="6" height="40" fill="#efe3c6"/><rect x="514" y="370" width="6" height="40" fill="#efe3c6"/>
+          <g fill="#ffd9a0"><rect x="330" y="336" width="6" height="24"/><rect x="397" y="330" width="6" height="30"/><rect x="464" y="336" width="6" height="24"/></g>
+          <g fill="#fff1c9"><ellipse cx="333" cy="330" rx="4" ry="7"/><ellipse cx="400" cy="324" rx="4" ry="7"/><ellipse cx="467" cy="330" rx="4" ry="7"/></g>
+        </svg><img class="ph" src="https://images.unsplash.com/photo-1599582383719-907ff9af1a50?fm=jpg&amp;q=75&amp;w=1600&amp;auto=format&amp;fit=crop" alt="Champagne and a shared platter served at a table on board" loading="lazy" onerror="this.remove()"><span class="no">No. 5</span></div>
+        <div class="body"><h3>Private Dinner Aboard</h3>
+          <p>A table set on deck and a private chef on request. Made for anniversaries, proposals and honeymoons.</p>
+          <div class="tags"><span>Private chef</span><span>Honeymoons</span></div>
+          <a class="textlink" href="#enquire" data-exp="Private Dinner Aboard">Enquire</a></div>
+      </article>
+
+      <article data-cat="celebrations" class="card wide" style="grid-column:1/-1">
+        <div class="art" style="aspect-ratio:16/4.6;min-height:190px"><svg viewBox="0 0 1600 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="1600" height="420" fill="url(#night)"/>
+          <path d="M0 90 Q400 210 800 90 T1600 90" stroke="#b48a48" stroke-width="1.5" fill="none"/>
+          <g><circle cx="130" cy="122" r="9" fill="#c2452d"/><circle cx="270" cy="146" r="9" fill="#ffd9a0"/><circle cx="400" cy="150" r="9" fill="#8fd6cf"/><circle cx="530" cy="146" r="9" fill="#ffd9a0"/><circle cx="670" cy="122" r="9" fill="#c2452d"/><circle cx="930" cy="58" r="9" fill="#8fd6cf"/><circle cx="1070" cy="36" r="9" fill="#ffd9a0"/><circle cx="1200" cy="30" r="9" fill="#c2452d"/><circle cx="1330" cy="36" r="9" fill="#ffd9a0"/><circle cx="1470" cy="58" r="9" fill="#8fd6cf"/></g>
+          <rect y="330" width="1600" height="90" fill="#041b20"/>
+          <g fill="#ffd9a0" opacity=".5"><rect x="300" y="344" width="180" height="3"/><rect x="760" y="356" width="260" height="3"/><rect x="1180" y="344" width="160" height="3"/></g>
+        </svg><img class="ph" src="https://images.unsplash.com/photo-1729490322330-fcf63a03df7e?fm=jpg&amp;q=75&amp;w=1600&amp;auto=format&amp;fit=crop" alt="Group of friends on the deck of a white motor yacht under way" loading="lazy" onerror="this.remove()"><span class="no">No. 6</span></div>
+        <div class="body"><h3>Parties &amp; Celebrations</h3>
+          <p>Birthdays, wedding parties and friends' getaways on the water, with the playlist, the menu and the route planned around your group.</p>
+          <div class="tags"><span>Groups</span><span>Music</span><span>Catering on request</span></div>
+          <a class="textlink" href="#enquire" data-exp="Parties &amp; Celebrations">Enquire</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div class="kband" aria-hidden="true"><div class="ktrack"><span>Sunset Cruises</span><i aria-hidden="true">✦</i><span>Sculpture Park Snorkel</span><i aria-hidden="true">✦</i><span>Private Island Tours</span><i aria-hidden="true">✦</i><span>Dinner On Deck</span><i aria-hidden="true">✦</i><span>Parties On The Water</span><i aria-hidden="true">✦</i><span>Sunset Cruises</span><i aria-hidden="true">✦</i><span>Sculpture Park Snorkel</span><i aria-hidden="true">✦</i><span>Private Island Tours</span><i aria-hidden="true">✦</i><span>Dinner On Deck</span><i aria-hidden="true">✦</i><span>Parties On The Water</span><i aria-hidden="true">✦</i><span>Sunset Cruises</span><i aria-hidden="true">✦</i><span>Sculpture Park Snorkel</span><i aria-hidden="true">✦</i><span>Private Island Tours</span><i aria-hidden="true">✦</i><span>Dinner On Deck</span><i aria-hidden="true">✦</i><span>Parties On The Water</span><i aria-hidden="true">✦</i><span>Sunset Cruises</span><i aria-hidden="true">✦</i><span>Sculpture Park Snorkel</span><i aria-hidden="true">✦</i><span>Private Island Tours</span><i aria-hidden="true">✦</i><span>Dinner On Deck</span><i aria-hidden="true">✦</i><span>Parties On The Water</span><i aria-hidden="true">✦</i></div></div>
+
+<section class="park" id="sculpture-park">
+  <div class="grid">
+    <div class="art"><svg viewBox="0 0 900 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="900" height="700" fill="url(#deepw)"/>
+      <g fill="#fff" opacity=".1"><path d="M100 0 L220 0 L400 700 L180 700Z"/><path d="M420 0 L480 0 L660 700 L520 700Z"/><path d="M680 0 L790 0 L900 420 L900 700 L860 700Z"/></g>
+      <path d="M0 0 Q150 26 300 6 T600 10 T900 2 L900 0Z" fill="#bff1ea" opacity=".6"/>
+      <path d="M0 590 C150 540 280 610 430 580 C600 548 720 620 900 566 L900 700 L0 700Z" fill="#052b33"/>
+      <path d="M0 640 C200 610 340 660 520 640 C680 622 780 660 900 636 L900 700 L0 700Z" fill="#041b20"/>
+      <g fill="#f2c979"><path d="M200 300 q30 -18 60 0 q-30 18 -60 0z M260 300 l18 -12 v24z"/><path d="M300 350 q24 -15 48 0 q-24 15 -48 0z M348 350 l15 -10 v20z"/><path d="M560 250 q26 -16 52 0 q-26 16 -52 0z M612 250 l16 -11 v22z"/><path d="M640 330 q20 -12 40 0 q-20 12 -40 0z M680 330 l12 -8 v16z"/></g>
+      <g fill="#fff" opacity=".45"><circle cx="470" cy="470" r="7"/><circle cx="486" cy="410" r="5"/><circle cx="462" cy="356" r="3.5"/><circle cx="478" cy="300" r="2.5"/></g>
+    </svg><img class="ph" src="https://commons.wikimedia.org/wiki/Special:FilePath/Underwater_sculptures_at_Molinere_Underwater_Sculpture_Park.jpg?width=1600" alt="Sculptures on the seabed at the Molinere Underwater Sculpture Park, Grenada" loading="lazy" onerror="this.remove()"></div>
+    <div class="copy">
+      <span class="eyebrow">The highlight guests name most</span>
+      <h2>A gallery under <em>five metres</em> of clear water</h2>
+      <p>Just north of St. George's, in Molinere Bay, sculptures stand on the seabed among coral and reef fish. It opened in 2006 and is widely recognised as the first underwater sculpture park in the world.</p>
+      <p>The crew anchor close by, hand you a mask and guide you from piece to piece, telling the story of each as you go.</p>
+      <dl>
+        <dt>Where</dt><dd>Molinere Bay, west coast of Grenada</dd>
+        <dt>How</dt><dd>Guided snorkel from the boat</dd>
+        <dt>Pairs with</dt><dd>Flamingo Bay swim, sunset run home</dd>
+      </dl>
+      <a class="btn ghost" href="#enquire" data-exp="Sculpture Park Snorkel">Plan a snorkel day</a>
+    </div>
+  </div>
+  <div class="parkgal">
+    <figure><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vicissitudes,_Grenada_Underwater_Sculptures_%28SunCat%29_-_Flickr.jpg?width=1600" alt="The Vicissitudes ring of figures on the seabed, Molinere Bay" loading="lazy" onerror="this.parentNode.remove()"><figcaption>Vicissitudes</figcaption></figure>
+    <figure><img src="https://commons.wikimedia.org/wiki/Special:FilePath/The_Lost_Correspondent,_Grenada_Underwater_Sculptures_%28SunCat%29_-_Flickr.jpg?width=1600" alt="The Lost Correspondent sculpture, a figure at a desk underwater, Molinere Bay" loading="lazy" onerror="this.parentNode.remove()"><figcaption>The Lost Correspondent</figcaption></figure>
+    <figure><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Grenada_Underwater_Sculpture_Park_%28Boris_Kasimov%29_-_Flickr.jpg?width=1600" alt="Sculptures at the Grenada Underwater Sculpture Park seen while snorkelling" loading="lazy" onerror="this.parentNode.remove()"><figcaption>Seen from the surface</figcaption></figure>
+  </div>
+  <p class="credit">Sculpture park photos: Boris Kasimov and SunCat, CC BY 2.0, via Wikimedia Commons.</p>
+</section>
+
+<section class="why">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">The Spice Isle difference</span><h2>Small boat, full attention</h2></div></div>
+    <div class="cols">
+      <div><h3>Private by design</h3><p>One party per charter. No strangers, no fixed timetable, no rushing back for the next group.</p></div>
+      <div><h3>Crew who tell the island</h3><p>Grenadian captains and guides who share the history and heritage behind every bay you pass.</p></div>
+      <div><h3>Food and drink on board</h3><p>Drinks and music as standard on sunset cruises, with a private chef available for dinners and parties.</p></div>
+      <div><h3>Made for occasions</h3><p>Honeymoons, proposals and birthdays planned personally, down to the playlist and the last stop.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="gband">
+  <div class="wrap"><div class="sec-head"><div><span class="eyebrow">Grenada from the water</span><h2>Scenes from a day on board</h2></div><a class="textlink" href="#enquire">Plan yours</a></div></div>
+  <div class="gal4">
+    <figure><img src="https://images.unsplash.com/photo-1722902634840-e90760f9cbcc?fm=jpg&amp;q=75&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Harbour town on a green hillside above the water" loading="lazy" onerror="this.parentNode.remove()"><figcaption><b>Harbour towns</b><a href="#enquire">Enquire</a></figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1605692498957-f1045e808732?fm=jpg&amp;q=75&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Boat crossing bright turquoise shallows, seen from above" loading="lazy" onerror="this.parentNode.remove()"><figcaption><b>Turquoise shallows</b><a href="#enquire">Enquire</a></figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1676629147275-c306d03fe4fa?fm=jpg&amp;q=75&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Motor yacht at anchor on a golden sea at sunset" loading="lazy" onerror="this.parentNode.remove()"><figcaption><b>Golden hour at anchor</b><a href="#enquire">Enquire</a></figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1637003405426-56ccdf594e3e?fm=jpg&amp;q=75&amp;w=1000&amp;auto=format&amp;fit=crop" alt="Palm-lined beach with clear water from above" loading="lazy" onerror="this.parentNode.remove()"><figcaption><b>Quiet beaches</b><a href="#enquire">Enquire</a></figcaption></figure>
+  </div>
+</section>
+
+<section class="crew" id="crew">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">The crew</span><h2>The names guests write home about</h2></div>
+      <p style="max-width:40ch;font-size:.98rem">Reviews rarely mention the boat first. They mention the people on it.</p></div>
+    <div class="list">
+      <div class="p"><span class="mono">M</span><b>Captain Marvel</b><span>Captain. Praised for his knowledge and easy company.</span></div>
+      <div class="p"><span class="mono">R</span><b>Rock</b><span>Boat captain and guide.</span></div>
+      <div class="p"><span class="mono">J</span><b>Captain Jack</b><span>Captain.</span></div>
+      <div class="p"><span class="mono">S</span><b>Slim Shady</b><span>Crew.</span></div>
+      <div class="p"><span class="mono">R</span><b>Rohan</b><span>Crew. Shares the island's heritage on board.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="rev" id="reviews">
+  <div class="wrap"><div class="grid">
+    <div class="score">
+      <span class="eyebrow">Guest reviews</span>
+      <div class="big">5.0</div>
+      <div class="stars" aria-label="5 out of 5">●●●●●</div>
+      <p>Six Tripadvisor reviews between 2019 and 2025, every one rated five out of five.</p>
+      <a class="textlink" href="https://www.tripadvisor.com/Attraction_Review-g1182535-d17651626-Reviews-Spice_Isle_Adventures_Tours_Water_Sports-Grand_Anse_South_Coast_Saint_George_Pa.html" target="_blank" rel="noopener">Read them on Tripadvisor</a>
+    </div>
+    <div>
+      <h2 style="margin-bottom:.7em">What guests keep saying</h2>
+      <div class="themes">
+        <div><b>A crew that feels like friends</b><p>Guests describe friendly, professional hosts and mention the captains by name.</p></div>
+        <div><b>History with the scenery</b><p>Reviewers value the local history and culture shared along the route.</p></div>
+        <div><b>The sculpture park</b><p>Snorkelling over the underwater sculptures comes up as the standout moment.</p></div>
+        <div><b>Sunsets done properly</b><p>Evening cruises with music, drinks and food are a repeat favourite.</p></div>
+        <div><b>It felt like our own boat</b><p>Honeymooners and couples note how personal and private the day felt.</p></div>
+        <div><b>Easy from the resorts</b><p>Several guests booked while staying at resorts on the south coast.</p></div>
+      </div>
+      <p class="note">Summarised from public Tripadvisor reviews. Full guest quotes can be added with permission.</p>
+    </div>
+  </div></div>
+</section>
+
+<section class="enq" id="enquire">
+  <img class="enqbg" src="https://images.unsplash.com/photo-1598770722761-0cab70ffd2fb?fm=jpg&amp;q=75&amp;w=2000&amp;auto=format&amp;fit=crop" alt="" loading="lazy" onerror="this.remove()">
+  <div class="wrap"><div class="grid">
+    <div class="copy">
+      <span class="eyebrow">Enquire</span>
+      <h2>Tell us the day you have <em>in mind</em></h2>
+      <p>Share your dates, group size and the occasion. The team replies with availability and a quote for a private charter built around you.</p>
+      <p style="font-size:.92rem;color:#b9cbc8">Departures from Grand Anse, South Coast, Saint George, Grenada.</p>
+    </div>
+    <form id="enqForm" novalidate>
+      <label>Name<input id="f-name" name="name" autocomplete="name" required></label>
+      <label>Email<input id="f-email" name="email" type="email" autocomplete="email" required></label>
+      <label>Experience
+        <select id="f-exp" name="experience">
+          <option>Sunset Cruise</option><option>Sculpture Park Snorkel</option><option>Wonders of Grenada</option>
+          <option>Private Island Tour</option><option>Private Dinner Aboard</option><option>Parties &amp; Celebrations</option><option>Not sure yet</option>
+        </select></label>
+      <label>Preferred date<input id="f-date" name="date" type="date"></label>
+      <label>Guests<input id="f-guests" name="guests" type="number" min="1" max="40" value="2"></label>
+      <label>Where are you staying?<input id="f-stay" name="stay" placeholder="Hotel, villa or ship"></label>
+      <label class="full">Anything we should know?<textarea id="f-notes" name="notes" placeholder="Occasion, dietary needs, places you want to see"></textarea></label>
+      <div class="full"><button class="btn solid" type="submit">Send enquiry</button></div>
+      <div class="formmsg" id="formMsg" role="status"></div>
+    </form>
+  </div></div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><a class="brand" href="#top"><b>Spice Isle Adventures</b><span>Tours &amp; Water Sports</span></a>
+        <p style="margin-top:1.4em;max-width:38ch">Private yacht tours, sunset cruises, private dinners, island tours and parties from Grand Anse, Grenada.</p></div>
+      <div><h4>Experiences</h4><ul>
+        <li><a href="#experiences">Sunset Cruise</a></li><li><a href="#sculpture-park">Sculpture Park Snorkel</a></li>
+        <li><a href="#experiences">Private Island Tour</a></li><li><a href="#experiences">Private Dinner Aboard</a></li><li><a href="#experiences">Parties &amp; Celebrations</a></li></ul></div>
+      <div><h4>Find us</h4><ul>
+        <li>Grand Anse, South Coast</li><li>Saint George, Grenada</li>
+        <li>Phone and email: to be added</li>
+        <li><a href="https://www.tripadvisor.com/Attraction_Review-g1182535-d17651626-Reviews-Spice_Isle_Adventures_Tours_Water_Sports-Grand_Anse_South_Coast_Saint_George_Pa.html" target="_blank" rel="noopener">Tripadvisor listing</a></li></ul></div>
+    </div>
+    <div class="legal"><span>© 2026 Spice Isle Adventures Tours &amp; Water Sports</span><span>Demo concept by Savvy Tech. Placeholder photos from Unsplash and Wikimedia Commons, hero video from Mixkit.</span></div>
+  </div>
+</footer>
+
+<div class="switch" role="group" aria-label="Choose a design sample">
+  <span>Design samples</span>
+  <button type="button" data-set="silversea" title="Follows silversea.com">1 · Silversea</button>
+  <button type="button" data-set="regent" title="Follows rssc.com">2 · Regent</button>
+  <button type="button" data-set="grandium" title="Inspired by the Grandium hotel theme">3 · Grandium</button>
+  <button type="button" data-set="kanila" title="Follows the Kanila travel theme">4 · Kanila</button>
+  <button type="button" data-set="signature" title="Original concept">5 · Original</button>
+  <button type="button" data-set="cozystay" title="Follows cozystay.loftocean.com/apartment">6 · CozyStay</button>
+  <button type="button" data-set="letsgo" title="Follows the LetsGo home 1 demo">7 · LetsGo 1</button>
+  <button type="button" data-set="letsgo2" title="Follows the LetsGo home 2 demo">8 · LetsGo 2</button>
+</div>
+
+<script>
+// Sunset at Grand Anse (12.02 N, 61.76 W), NOAA approximation, shown in Grenada time (UTC-4).
+function sunsetMinutesLocal(date){
+  var LAT=12.02, LON=-61.76, rad=Math.PI/180;
+  var local=new Date(date.getTime()-4*3600e3);
+  var start=Date.UTC(local.getUTCFullYear(),0,1);
+  var n=Math.floor((Date.UTC(local.getUTCFullYear(),local.getUTCMonth(),local.getUTCDate())-start)/864e5)+1;
+  var g=2*Math.PI/365*(n-1);
+  var eq=229.18*(0.000075+0.001868*Math.cos(g)-0.032077*Math.sin(g)-0.014615*Math.cos(2*g)-0.040849*Math.sin(2*g));
+  var dec=0.006918-0.399912*Math.cos(g)+0.070257*Math.sin(g)-0.006758*Math.cos(2*g)+0.000907*Math.sin(2*g)-0.002697*Math.cos(3*g)+0.00148*Math.sin(3*g);
+  var ha=Math.acos(Math.cos(90.833*rad)/(Math.cos(LAT*rad)*Math.cos(dec))-Math.tan(LAT*rad)*Math.tan(dec))/rad;
+  return 720-4*(LON-ha)-eq-240;
+}
+(function(){
+  try{
+    var m=Math.round(sunsetMinutesLocal(new Date())), h=Math.floor(m/60), mm=m%60;
+    document.getElementById('sunsetTime').textContent='about '+(h>12?h-12:h)+':'+(mm<10?'0':'')+mm+' pm';
+  }catch(e){}
+  var btn=document.getElementById('menuBtn'), links=document.getElementById('links');
+  btn.addEventListener('click',function(){var o=links.classList.toggle('open');btn.setAttribute('aria-expanded',o);});
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t=document.getElementById(a.getAttribute('href').slice(1)); if(!t) return;
+      e.preventDefault(); links.classList.remove('open'); btn.setAttribute('aria-expanded',false);
+      if(a.dataset.exp){document.getElementById('f-exp').value=a.dataset.exp;}
+      if(a.dataset.f){applyFilter(a.dataset.f);}
+      var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      t.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+    });
+  });
+  // ---- site settings: fill these in to go live ----
+  var SITE={
+    enquiryEmail:'',   // e.g. 'bookings@example.com' : enquiries open in the visitor's email app addressed here
+    formEndpoint:''    // optional form service URL (Formspree or similar) : enquiries are then sent straight from the page
+  };
+  // hero video: one clip per design sample, 720p first, 360p if that fails, illustration if both fail
+  var VIDEOS={silversea:1941,regent:2167,grandium:2166,kanila:5375,signature:45259,cozystay:4446,letsgo:5006,letsgo2:7060};
+  var hero=document.querySelector('.hero'), vid=document.getElementById('heroVid'), vidBtn=document.getElementById('vidBtn');
+  var reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches, userPaused=reduceMotion;
+  function vsrc(id,q){return 'https://assets.mixkit.co/videos/'+id+'/'+id+'-'+q+'.mp4';}
+  function loadVideo(s){ loadVideoId(VIDEOS[s]); }
+  function loadVideoId(id){
+    if(!id||vid.dataset.id==id) return;
+    document.querySelectorAll('.hdots button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.v==id);});
+    vid.dataset.id=id; vid.dataset.q='1080'; vid.classList.remove('on'); hero.classList.remove('has-video');
+    vid.src=vsrc(id,'1080'); vid.load();
+  }
+  vid.addEventListener('error',function(){
+    var next={'1080':'720','720':'360'}[vid.dataset.q];
+    if(next){vid.dataset.q=next;vid.src=vsrc(vid.dataset.id,next);vid.load();}
+  });
+  vid.addEventListener('loadeddata',function(){
+    vid.classList.add('on'); hero.classList.add('has-video');
+    if(!userPaused){var p=vid.play(); if(p&&p.catch)p.catch(function(){});}
+    syncBtn();
+  });
+  function syncBtn(){vidBtn.textContent=userPaused?'Play video':'Pause video';vidBtn.setAttribute('aria-pressed',userPaused);}
+  vidBtn.addEventListener('click',function(){
+    userPaused=!userPaused;
+    if(userPaused){vid.pause();}else{var p=vid.play(); if(p&&p.catch)p.catch(function(){});}
+    syncBtn();
+  });
+  document.querySelectorAll('.hdots button').forEach(function(b){b.addEventListener('click',function(){loadVideoId(+b.dataset.v);});});
+  var today=new Date(Date.now()-4*3600e3).toISOString().slice(0,10);
+  ['f-date','q-date'].forEach(function(id){document.getElementById(id).min=today;});
+
+  // Kanila sample: experience filter pills
+  var pills=document.querySelectorAll('.kfilter button'), cardEls=document.querySelectorAll('.cards .card');
+  function applyFilter(f){
+    pills.forEach(function(b){b.setAttribute('aria-pressed',b.dataset.f===f);});
+    cardEls.forEach(function(c){c.hidden=!(f==='all'||c.dataset.cat===f);});
+  }
+  pills.forEach(function(b){b.addEventListener('click',function(){applyFilter(b.dataset.f);});});
+
+  // design sample switcher: remembers the choice and supports links like index.html#style-kanila
+  var STYLES=['silversea','regent','grandium','kanila','signature','cozystay','letsgo','letsgo2'];
+  function setStyle(s,quiet){
+    if(STYLES.indexOf(s)<0) s=STYLES[0];
+    document.documentElement.setAttribute('data-style',s);
+    document.querySelectorAll('.switch button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.set===s);});
+    try{localStorage.setItem('sia-style',s);}catch(e){}
+    loadVideo(s); applyFilter('all');
+    if(!quiet){try{location.hash='style-'+s;}catch(e){}}
+  }
+  var saved=null; try{saved=localStorage.getItem('sia-style');}catch(e){}
+  var fromHash=(location.hash||'').replace('#style-','');
+  setStyle(STYLES.indexOf(fromHash)>=0?fromHash:(saved||STYLES[0]),true);
+  document.querySelectorAll('.switch button').forEach(function(b){b.addEventListener('click',function(){setStyle(b.dataset.set);});});
+  window.addEventListener('hashchange',function(){var h=(location.hash||'').replace('#style-','');if(STYLES.indexOf(h)>=0)setStyle(h,true);});
+  document.getElementById('q-go').addEventListener('click',function(){
+    document.getElementById('f-exp').value=document.getElementById('q-exp').value;
+    document.getElementById('f-date').value=document.getElementById('q-date').value;
+    document.getElementById('f-guests').value=document.getElementById('q-guests').value;
+    document.getElementById('enquire').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  var form=document.getElementById('enqForm'), msg=document.getElementById('formMsg');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var name=document.getElementById('f-name').value.trim(), email=document.getElementById('f-email').value.trim();
+    if(!name||!/^\S+@\S+\.\S+$/.test(email)){msg.textContent='Add your name and a valid email address so the team can reply.';msg.classList.add('on');return;}
+    var g=function(id){return document.getElementById(id).value.trim();};
+    var lines=['Name: '+name,'Email: '+email,'Experience: '+g('f-exp'),'Preferred date: '+(g('f-date')||'Flexible'),'Guests: '+g('f-guests'),'Staying at: '+(g('f-stay')||'Not given'),'Notes: '+(g('f-notes')||'None')];
+    var text=lines.join('\n'), subject='Charter enquiry: '+g('f-exp')+' for '+g('f-guests');
+    var mailto='mailto:'+SITE.enquiryEmail+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(text);
+    function show(head,withActions){
+      msg.textContent=''; var h=document.createElement('strong'); h.textContent=head; msg.appendChild(h);
+      var pre=document.createElement('pre'); pre.textContent=text; msg.appendChild(pre);
+      if(withActions){
+        var acts=document.createElement('div'); acts.className='acts';
+        var a=document.createElement('a'); a.className='btn ghost'; a.href=mailto; a.textContent='Open in email app'; acts.appendChild(a);
+        var c=document.createElement('button'); c.type='button'; c.className='btn ghost'; c.textContent='Copy enquiry';
+        c.addEventListener('click',function(){
+          try{navigator.clipboard.writeText(text).then(function(){c.textContent='Copied';},function(){c.textContent='Select the text above to copy';});}
+          catch(err){c.textContent='Select the text above to copy';}
+        });
+        acts.appendChild(c); msg.appendChild(acts);
+      }
+      msg.classList.add('on');
+    }
+    if(SITE.formEndpoint){
+      show('Sending your enquiry\u2026',false);
+      fetch(SITE.formEndpoint,{method:'POST',headers:{'Accept':'application/json'},body:new FormData(form)})
+        .then(function(r){ if(!r.ok) throw new Error(r.status); show('Thanks, '+name+'. Your enquiry has been sent. The team will reply to '+email+'.',false); form.reset(); })
+        .catch(function(){ show('The enquiry could not be sent from this page. Send it by email or copy it instead.',true); });
+    }else{
+      show('Thanks, '+name+'. Your enquiry is ready. Send it from your email app, or copy it.',true);
+    }
+  });
+})();
+</script>
+</body>
+</html>
