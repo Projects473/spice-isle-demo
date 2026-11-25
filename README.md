@@ -1,32 +1,42 @@
-# Spice Isle Adventures Tours & Water Sports: demo site
+# Spice Isle Adventures Tours & Water Sports: website demo
 
-A single-page demo with eight design samples for the client to compare. Everything is in `index.html`; there is no build step.
+A website demo for Spice Isle Adventures (Grand Anse, Grenada). It combines apple.com's layout with the Island Routes Caribbean tours site, in turquoise. The whole site is in one file, `index.html`, with no build step: 19 pages, switched with links like `#/sunset-cruise`.
 
 ## Publish on GitHub Pages
 
-1. Create a new public repository (for example `spice-isle-demo`).
-2. Upload `index.html` and this `README.md` to the repository root.
-3. Open **Settings → Pages**, set **Source** to "Deploy from a branch", choose `main` and `/ (root)`, then save.
-4. After a minute or two the site is live at `https://<your-username>.github.io/<repository-name>/`.
+1. Open your repository on GitHub (or create a new public one, for example `spice-isle-adventures`).
+2. Delete the old files from the earlier version (the separate `.html` pages, the `assets` and `_build` folders, and the old `index.html`).
+3. Upload `index.html` and this `README.md` to the repository root.
+4. Open **Settings → Pages**, set **Source** to "Deploy from a branch", choose `main` and `/ (root)`, then save.
+5. After a minute or two the site is live at `https://<your-username>.github.io/<repository-name>/`.
 
-## Linking to one sample
+## Linking to a page
 
-The bar at the bottom of the page switches samples. To open a specific one, add its name to the address:
+Add the page name after `#/` at the end of the address:
 
-| Sample | Link ending |
+| Page | Link ending |
 | --- | --- |
-| 1 · Silversea | `#style-silversea` |
-| 2 · Regent | `#style-regent` |
-| 3 · Grandium | `#style-grandium` |
-| 4 · Kanila | `#style-kanila` |
-| 5 · Original | `#style-signature` |
-| 6 · CozyStay | `#style-cozystay` |
-| 7 · LetsGo 1 | `#style-letsgo` |
-| 8 · LetsGo 2 | `#style-letsgo2` |
+| Home | `#/` |
+| All experiences | `#/experiences` (filters: `#/experiences?cat=snorkel`, `sunset`, `beaches`, `celebrations`, `couples`, `groups`) |
+| Underwater Sculpture Park Snorkel | `#/sculpture-park-snorkel` |
+| Grenada Sunset Cruise | `#/sunset-cruise` |
+| Private Island Tour | `#/private-island-tour` |
+| Private Dinner Aboard | `#/private-dinner-aboard` |
+| Wonders of Grenada | `#/wonders-of-grenada` |
+| Parties & Celebrations | `#/parties-and-celebrations` |
+| Private & Bespoke Charters | `#/private-charters` |
+| Group Experiences | `#/group-experiences` |
+| Trip Inspo and articles | `#/trip-inspo`, `#/sculpture-park-guide`, `#/grenada-sunset-guide`, `#/beaches-by-boat` |
+| About Us & Reviews | `#/about` |
+| FAQ | `#/faq` |
+| Contact Us | `#/contact` |
+| Your Enquiry | `#/enquiry` |
 
-## Enquiry form
+The "Demo pages" bar at the bottom of the screen is for showing the client around. Remove it before launch by deleting the `<nav class="demo-pages" ...>...</nav>` line near the end of `index.html`.
 
-Near the top of the script at the bottom of `index.html`:
+## Forms
+
+Forms send nothing until connected. In `index.html`, search for `var SITE=` and fill in:
 
 ```js
 var SITE={
@@ -35,20 +45,22 @@ var SITE={
 };
 ```
 
-- With `enquiryEmail` set, "Open in email app" opens a pre-addressed email.
-- With `formEndpoint` set, enquiries are sent straight from the page.
-- With both blank, the form still builds the enquiry for the visitor to email or copy.
+- With `enquiryEmail` set, the "Open in email app" button opens a pre-addressed email.
+- With `formEndpoint` set, the enquiry, contact and bespoke forms send straight from the page.
+- With both blank, the forms still build the message for the visitor to email or copy.
 
 ## Before going live
 
-- Replace the placeholder photos and hero videos with the client's own media.
-- Add the client's phone number and email in the footer.
-- Confirm prices, durations and crew names with the client.
+- Add the client's phone, WhatsApp, email and social media links (search for "to be added").
+- Add prices (every experience currently shows "Request a quote").
+- Confirm timings, what's included, minimum age, terms and the FAQ answers with the client.
+- Replace the placeholder photos and hero video with the client's own.
 
 ## Media credits
 
 - Placeholder photos: Unsplash (Unsplash License).
-- Sculpture park photos: Boris Kasimov and SunCat, CC BY 2.0, via Wikimedia Commons. Keep this credit while the photos are in use.
-- Hero videos: Mixkit (Mixkit License).
+- Sculpture park photos: Boris Kasimov and SunCat, CC BY 2.0, via Wikimedia Commons. Keep this credit while they are used.
+- Hero video: Mixkit (Mixkit License).
+- Fonts: Playfair Display and Outfit (Google Fonts, Open Font License); system fonts elsewhere.
 
-Demo concept by Savvy Tech.
+Website demo by Savvy Tech.
